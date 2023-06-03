@@ -1,0 +1,55 @@
+<?xml version="1.0" ?>
+<computers>
+    <computer>
+        <Name>Dashboard</Name>
+        <IP>127.0.0.1
+10.0.2.15
+</IP>
+        <gateway>host
+10.0.2.255
+</gateway>
+        <IP_External>23.31.118.254</IP_External>
+        <Time>18:38:58</Time>
+    </computer>
+    <computer>
+        <Name>Network Config</Name>
+        <IP/>
+        <Time>18:39:04</Time>
+    </computer>
+    <computer>
+        <Name>Network Scan</Name>
+        <Output>b'traceroute'</Output>
+        <Time>18:39:20</Time>
+    </computer>
+    <computer>
+        <Name>Port Scan</Name>
+        <Run_Time>Port:    21 Open -|- Service is: ftp</Run_Time>
+        <Time>18:39:32</Time>
+    </computer>
+    <computer>
+        <Name>Port Scan</Name>
+        <Run_Time>Port:    22 Open -|- Service is: ssh</Run_Time>
+        <Time>18:39:32</Time>
+    </computer>
+    <computer>
+        <Name>Ping</Name>
+        <Destination>10.0.2.15</Destination>
+        <Output>b'PING 10.0.'</Output>
+        <Time>18:39:42</Time>
+    </computer>
+    <computer>
+        <Name>Network Picture</Name>
+        <note>Created network picture</note>
+        <Time>18:39:52</Time>
+    </computer>
+    <computer>
+        <Name>Security Log</Name>
+        <note>Complted getting security log</note>
+        <Time>18:40:07</Time>
+    </computer>
+    <computer>
+        <Name>Backup network files</Name>
+        <note>Complted getting network files</note>
+        <Time>18:40:22</Time>
+    </computer>
+</computers>

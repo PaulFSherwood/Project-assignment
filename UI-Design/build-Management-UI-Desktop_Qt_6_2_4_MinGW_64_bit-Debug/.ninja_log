@@ -1,0 +1,19 @@
+# ninja log v5
+13	185	7057432865084290	Management-UI_autogen/timestamp	5334ffd4f61c005e
+13	185	7057432865084290	Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+627	2374	7056801034963764	CMakeFiles/Management-UI.dir/Management-UI_autogen/mocs_compilation.cpp.obj	eeee1a27f5ed3b
+194	2234	7057432885574300	CMakeFiles/Management-UI.dir/mainwindow.cpp.obj	d58cd65e74791be5
+2235	2560	7057432888804279	Management-UI.exe	311bc5596ea31bb3
+13	185	7057432865084290	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/timestamp	5334ffd4f61c005e
+13	185	7057432865084290	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+630	2346	7056801034683765	CMakeFiles/Management-UI.dir/main.cpp.obj	dd49f53ed5d568d4
+10	183	7057458693438895	Management-UI_autogen/timestamp	5334ffd4f61c005e
+10	183	7057458693438895	Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+10	183	7057458693438895	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/timestamp	5334ffd4f61c005e
+10	183	7057458693438895	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+192	1966	7057458711268994	CMakeFiles/Management-UI.dir/mainwindow.cpp.obj	d58cd65e74791be5
+10	179	7057459103756298	Management-UI_autogen/timestamp	5334ffd4f61c005e
+10	179	7057459103756298	Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+10	179	7057459103756298	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/timestamp	5334ffd4f61c005e
+10	179	7057459103756298	D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/Management-UI_autogen/mocs_compilation.cpp	5334ffd4f61c005e
+188	1933	7057459121296308	CMakeFiles/Management-UI.dir/mainwindow.cpp.obj	d58cd65e74791be5

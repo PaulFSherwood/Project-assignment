@@ -1,0 +1,9 @@
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/Management-UI.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/edit_cache.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/rebuild_cache.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/list_install_components.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/install.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/install/local.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/install/strip.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/Management-UI_autogen_timestamp_deps.dir
+D:/Documents/school/Champlain/SDEV-435-81/School-SDEV-435-81/Project-assesment/UI-Design/build-Management-UI-Desktop_Qt_6_2_4_MinGW_64_bit-Debug/CMakeFiles/Management-UI_autogen.dir
