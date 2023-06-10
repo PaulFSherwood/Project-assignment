@@ -1,0 +1,7 @@
+{
+    "cmake.sourceDirectory": "/home/sherwood/Documents/school/Project-assignment/UI-Design/Management-UI",
+    "files.associations": {
+        "iostream": "cpp",
+        "ostream": "cpp"
+    }
+}
