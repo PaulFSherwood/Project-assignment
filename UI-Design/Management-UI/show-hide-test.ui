@@ -48,6 +48,8 @@
 	background-color: rgb(61, 80, 95);
 	border-radius: 15px;
 	border: 3px solid rgb(120, 157, 186);
+	text-align: left;
+	padding-left: 5px;
 }
 #left_nav_section QPushButton:hover,
 #left_header_nav QPushButton:hover,
@@ -110,7 +112,7 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_2">
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="dashboard_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -129,7 +131,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="pushButton_5">
+           <widget class="QPushButton" name="cost_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -148,7 +150,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="work_orders_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -167,7 +169,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="inventory_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -186,7 +188,7 @@
            </widget>
           </item>
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="pushButton_4">
+           <widget class="QPushButton" name="charts_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -389,7 +391,7 @@
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>4</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">

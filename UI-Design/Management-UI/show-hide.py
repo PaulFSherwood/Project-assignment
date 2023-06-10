@@ -32,39 +32,54 @@ class MainWindow(QtWidgets.QMainWindow):
         # fa5.window-restore    # Maximize
         # mdi.close-thick     # Close
 
+        ############################################################################################################
+        # ICON SETUP
+        # Setting up icons for each button (couldn't find another way to show icons but with buttons)
         self.right_menu_button.setIcon(qta.icon('fa5s.sign-out-alt', color='orange'))
         self.left_menu_button.setIcon(qta.icon('fa5s.sign-in-alt', color='orange', hflip=True))
-
-
-
-
         self.pushButton_7.setIcon(qta.icon('ri.pie-chart-line', color='orange'))
         self.pushButton_7.setIconSize(QtCore.QSize(32, 32))  # Rezise the icon to 32x32
-        # self.frame_3.setIcon(qta.icon('ri.pie-chart-line', color='orange'))
-        self.pushButton.setIcon(qta.icon('mdi.equalizer', color='orange'))
-        self.pushButton_5.setIcon(qta.icon('ri.temp-hot-fill', color='orange'))
-        self.pushButton_2.setIcon(qta.icon('mdi.bullseye', color='orange'))
-        self.pushButton_3.setIcon(qta.icon('fa.code-fork', color='orange'))
-        self.pushButton_4.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
+
+        self.dashboard_pushButton.setIcon(qta.icon('mdi.monitor-dashboard', color='orange'))
+        self.cost_pushButton.setIcon(qta.icon('fa5s.money-bill', color='orange'))
+        self.work_orders_pushButton.setIcon(qta.icon('ri.list-unordered', color='orange'))
+        self.inventory_pushButton.setIcon(qta.icon('mdi.warehouse', color='orange'))
+        self.work_orders_pushButton.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
+        self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
 
         self.display_sample_bar_chart()
-        # self.pushButton.clicked.connect(self.display_bar_chart)
-        # self.frame_16.setStyleSheet("background-color: red;")
-
-        # print(self.stackedWidget.currentIndex()) # show the frame number
-        # print(self.stackedWidget.currentWidget()) # show the widget
 
         # set right_menu_widget as hidden when starting the application
         self.right_menu_widget.setHidden(True)
 
+        ############################################################################################################
+        # BUTTON CONNECTIONS
         # show and hide the right_menu_widget when menu_button is clicked
         self.right_menu_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
         self.left_menu_button.clicked.connect(lambda: self.left_menu_widget.setHidden(not self.left_menu_widget.isHidden()))
+        self.dashboard_pushButton.clicked.connect(self.show_dashboard)
+        self.cost_pushButton.clicked.connect(self.show_cost)
+        self.work_orders_pushButton.clicked.connect(self.show_work_orders_view)
+        self.inventory_pushButton.clicked.connect(self.show_inventory_view)
+        self.charts_pushButton.clicked.connect(self.show_charts_view)
 
     def resizeEvent(self, event):
         # print("frame_16 size:", self.size())  # Print the size of frame_16
         self.canvas.setGeometry(self.frame_16.rect())
         event.accept()
+
+    ############################################################################################################
+    # SWAP STACKED WIDGETS (SCREENS)
+    def show_dashboard(self):
+        self.stacked_widget.setCurrentWidget(self.dashboard_view)
+    def show_cost(self):
+        self.stacked_widget.setCurrentWidget(self.cost_view)
+    def show_work_orders_view(self):
+        self.stacked_widget.setCurrentWidget(self.work_orders_view)
+    def show_inventory_view(self):
+        self.stacked_widget.setCurrentWidget(self.inventory_view)
+    def show_charts_view(self):
+        self.stacked_widget.setCurrentWidget(self.charts_view)
 
     def display_sample_bar_chart(self):
         # Generate sample data for the bar chart
