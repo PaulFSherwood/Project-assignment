@@ -1,4 +1,6 @@
-from PyQt6 import QtWidgets, uic, QtCore
+from PyQt6 import QtWidgets, uic, QtCore, QtGui
+from PyQt6.QtCore import Qt
+
 from PyQt6.QtCore import QTimer
 import qtawesome as qta
 import sys
@@ -51,8 +53,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.charts_pushButton.clicked.connect(lambda: self.switch_page(self.charts_view, "CHARTS"))
 
         ############################################################################################################
-        # TABLE SETUP
+        # TABLE SETUP / TAB SETUP
         self.load_table_data()
+        self.load_work_order_data()
+        self.load_inventory_data()
+        self.load_charts_data()
+
 
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
@@ -87,7 +93,9 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create a FigureCanvas widget for the plot
         self.canvas = FigureCanvas(self.fig)
         self.canvas.setParent(self.dashboard_frame_left)
-        self.canvas.setGeometry(self.rect())
+        # self.canvas.setGeometry(self.rect())
+        self.canvas.setGeometry(self.dashboard_frame_left.rect())
+        
 
         # Show the canvas and redraw
         self.canvas.setVisible(True)
@@ -141,6 +149,100 @@ class MainWindow(QtWidgets.QMainWindow):
             self.cost_lower_table.setItem(parts_data.index(user), 2, QtWidgets.QTableWidgetItem(str(user["price"])))
             self.cost_lower_table.setItem(parts_data.index(user), 3, QtWidgets.QTableWidgetItem(user["date"]))
         
+    def load_work_order_data(self):
+        # Sample data for the work order table (JCN, Reason, User, Priority, Notes)
+        work_order_data = [{"jcn": "202306061630", "reason": "Can't see textures", "user": "John", "priority": "1", "notes": "While flying around atlanta we could not see ground textures but we could see the sky."},\
+                           {"jcn": "202306061700", "reason": "Daily Preflight", "user": "Jane", "priority": "3", "notes": "Preflight"},\
+                           {"jcn": "202306062015", "reason": "ILS not present", "user": "Bob", "priority": "3", "notes": "Flying ILS 27R at KSFO could not capture ILS GS.  No GS bar, but AP would engage"},\
+                           {"jcn": "202306062030", "reason": "Sim would not start", "user": "Mary", "priority": "1", "notes": ""},\
+                           {"jcn": "202306062230", "reason": "Oil test required", "user": "Mike", "priority": "3", "notes": "Sent oil sample to lab for testing"}]
+        # set the number of rows
+        self.work_order_table.setRowCount(len(work_order_data))
+        # hide row numbers
+        self.work_order_table.verticalHeader().setVisible(False)
+        # set column widths
+        self.work_order_table.setColumnWidth(0, 100) # JCN
+        self.work_order_table.setColumnWidth(1, 200) # Reason
+        self.work_order_table.setColumnWidth(2, 100) # User
+        self.work_order_table.setColumnWidth(3, 100) # Priority
+        # resize "Notes" column to fill remaining space
+        self.work_order_table.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
+        # push data into the table
+        for work_order in work_order_data:
+            self.work_order_table.setItem(work_order_data.index(work_order), 0, QtWidgets.QTableWidgetItem(work_order["jcn"]))
+            self.work_order_table.setItem(work_order_data.index(work_order), 1, QtWidgets.QTableWidgetItem(work_order["reason"]))
+            self.work_order_table.setItem(work_order_data.index(work_order), 2, QtWidgets.QTableWidgetItem(work_order["user"]))
+            self.work_order_table.setItem(work_order_data.index(work_order), 3, QtWidgets.QTableWidgetItem(work_order["priority"]))
+            self.work_order_table.setItem(work_order_data.index(work_order), 4, QtWidgets.QTableWidgetItem(work_order["notes"]))
+        # if the priority is 1, set the background color of that priority cell to red
+        for row in range(self.work_order_table.rowCount()):
+            if self.work_order_table.item(row, 3).text() == "1":
+                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(255, 0, 0))
+            elif self.work_order_table.item(row, 3).text() == "2":
+                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(255, 255, 0))
+            elif self.work_order_table.item(row, 3).text() == "3":
+                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(0, 255, 0))
+
+    def load_inventory_data(self):
+        # Sample data for the inventory table (Amount, Name, Min Stock, Location, Cost, Employee)
+        inventory_data = [{"amount": 5, "name": "HDD", "min_stock": 5, "location": "61A", "cost": 100, "employee": "John"},\
+                            {"amount": 1, "name": "RAM", "min_stock": 10, "location": "4", "cost": 50, "employee": "Jane"},\
+                            {"amount": 15, "name": "CPU", "min_stock": 15, "location": "66F", "cost": 25, "employee": "Bob"},\
+                            {"amount": 2, "name": "GPU", "min_stock": 5, "location": "12D", "cost": 125, "employee": "Mary"},\
+                            {"amount": 10, "name": "PSU", "min_stock": 10, "location": "1", "cost": 75, "employee": "Mike"}]
+        # set the number of rows
+        self.inventory_table.setRowCount(len(inventory_data))
+        # hide row numbers
+        self.inventory_table.verticalHeader().setVisible(False)
+        # set all column widths evenly between all columns
+        for column in range(self.inventory_table.columnCount()):
+            self.inventory_table.setColumnWidth(column, 100)
+
+        # push data into the table
+        for inventory in inventory_data:
+            self.inventory_table.setItem(inventory_data.index(inventory), 0, QtWidgets.QTableWidgetItem(str(inventory["amount"])))
+            self.inventory_table.setItem(inventory_data.index(inventory), 1, QtWidgets.QTableWidgetItem(inventory["name"]))
+            self.inventory_table.setItem(inventory_data.index(inventory), 2, QtWidgets.QTableWidgetItem(str(inventory["min_stock"])))
+            self.inventory_table.setItem(inventory_data.index(inventory), 3, QtWidgets.QTableWidgetItem(inventory["location"]))
+            self.inventory_table.setItem(inventory_data.index(inventory), 4, QtWidgets.QTableWidgetItem(str(inventory["cost"])))
+            self.inventory_table.setItem(inventory_data.index(inventory), 5, QtWidgets.QTableWidgetItem(inventory["employee"]))
+
+        # if the inventory amount is less than the minimum stock, set the background color of that cell to light red
+        ## TODO: This is not working
+
+    def load_charts_data(self):
+        # Load a sample bar chart into chart_top (sun,mon,tue, wed, thu, fri, sat) (0, scale to highest value) label Operating cost
+
+        # Generate sample data for the bar chart
+        labels = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        data = [0, 250, 1500, 2500, 250, 1000, 0]
+
+        # Create a figure and axis for the bar chart
+        fig = Figure()
+        ax = fig.add_subplot(111)
+
+        # Set the positions of the bars on the x-axis
+        x = np.arange(len(labels))
+
+        # Plot the bar chart
+        ax.bar(x, data)
+
+        # Set labels and title
+        ax.set_xlabel('Categories')
+        ax.set_ylabel('Values')
+        ax.set_title('Sample Bar Chart')
+
+        # Create a FigureCanvas widget for the plot
+        canvas = FigureCanvas(fig)
+        canvas.setParent(self.chart_top)
+        canvas.setGeometry(self.chart_top.rect())
+        # canvas.setGeometry(self.rect())
+
+        # Show the canvas and redraw
+        canvas.setVisible(True)
+        canvas.draw()
+
+
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
