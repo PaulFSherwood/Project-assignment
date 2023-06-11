@@ -50,6 +50,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.inventory_pushButton.clicked.connect(lambda: self.switch_page(self.inventory_view, "INVENTORY"))
         self.charts_pushButton.clicked.connect(lambda: self.switch_page(self.charts_view, "CHARTS"))
 
+        ############################################################################################################
+        # TABLE SETUP
+        self.load_table_data()
+
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
@@ -97,7 +101,46 @@ class MainWindow(QtWidgets.QMainWindow):
         self.set_4_count.setText(str("Awaiting Engineering"))
         self.set_5_count.setText(str("..."))
 
-
+    ############################################################################################################
+    # LOAD TABLE DATA
+    def load_table_data(self):
+        #########################
+        ## UPPER TABLE
+        # Sample data for the man hours table (User, Hours Worked, Cost)
+        man_hours_data = [{"user": "John", "hours_worked": 4, "cost": 100},\
+                          {"user": "Jane", "hours_worked": 2, "cost": 50},\
+                          {"user": "Bob", "hours_worked": 1, "cost": 25},\
+                          {"user": "Mary", "hours_worked": 5, "cost": 125},\
+                          {"user": "Mike", "hours_worked": 3, "cost": 75}]
+        # set the number of rows
+        self.cost_upper_table.setRowCount(len(man_hours_data))
+        # hide row numbers
+        self.cost_upper_table.verticalHeader().setVisible(False)
+        # push data into the table
+        for user in man_hours_data:
+            self.cost_upper_table.setItem(man_hours_data.index(user), 0, QtWidgets.QTableWidgetItem(user["user"]))
+            self.cost_upper_table.setItem(man_hours_data.index(user), 1, QtWidgets.QTableWidgetItem(str(user["hours_worked"])))
+            self.cost_upper_table.setItem(man_hours_data.index(user), 2, QtWidgets.QTableWidgetItem(str(user["cost"])))
+        
+        #########################
+        ## LOWER TABLE
+        # Sample data for the parts table (User, Part, Price, Date)
+        parts_data = [{"user": "John", "part": "HDD", "price": 100, "date": "2021-01-01"},\
+                        {"user": "Jane", "part": "RAM", "price": 50, "date": "2021-01-02"},\
+                        {"user": "Bob", "part": "CPU", "price": 25, "date": "2021-01-03"},\
+                        {"user": "Mary", "part": "GPU", "price": 125, "date": "2021-01-04"},\
+                        {"user": "Mike", "part": "PSU", "price": 75, "date": "2021-01-05"}]
+        # set the number of rows
+        self.cost_lower_table.setRowCount(len(parts_data))
+        # hide row numbers
+        self.cost_lower_table.verticalHeader().setVisible(False)
+        # push data into the table
+        for user in parts_data:
+            self.cost_lower_table.setItem(parts_data.index(user), 0, QtWidgets.QTableWidgetItem(user["user"]))
+            self.cost_lower_table.setItem(parts_data.index(user), 1, QtWidgets.QTableWidgetItem(user["part"]))
+            self.cost_lower_table.setItem(parts_data.index(user), 2, QtWidgets.QTableWidgetItem(str(user["price"])))
+            self.cost_lower_table.setItem(parts_data.index(user), 3, QtWidgets.QTableWidgetItem(user["date"]))
+        
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
