@@ -109,7 +109,6 @@ QTableView QHeaderView {
     font-family: Verdana;
     font-size: 12px;
 }
-
 QTableView QHeaderView::section {
     background-color: rgb(61, 80, 95);
     color: #ffffff;
@@ -117,7 +116,6 @@ QTableView QHeaderView::section {
     font-size: 12px;
     border: none;
 }
-
 QTableView {
     background-color: rgba(61, 80, 95, 100);
     color: #ffffff;
@@ -127,28 +125,24 @@ QTableView {
     selection-background-color: rgb(95, 80, 61);
     selection-color: #ffffff;
 }
-
 QTableView::item {
     padding: 5px;
+	text-align: center; /* Center the content */
 }
-
 QTableView::item:selected {
     background-color: rgb(95, 80, 61);
     color: #ffffff;
 }
-
 QTableView::item:focus {
     background-color: rgb(95, 80, 61);
     color: #ffffff;
     outline: none;
 }
-
 QTableView::item:hover {
     background-color: rgb(240, 220, 210); /* Very light brown */
     border: 1px solid rgb(173, 216, 230); /* Light blue */
     color: #000000; /* Black */
 }
-
 #cost_upper_table, #cost_lower_table {
     gridline-color: rgb(193, 139, 111);
     border-color: rgb(193, 139, 111);
@@ -158,12 +152,10 @@ QTableView::item:hover {
     font-family: Verdana;
     font-size: 12px;
 }
-
 #cost_upper_table QLabel, #cost_lower_table QLabel {
     font: 700 14pt &quot;Candara&quot;;
     color: rgb(38, 163, 170);
 }
-
 #cost_upper_table QWidget, #cost_lower_table QWidget {
     font: 12px &quot;Verdana&quot;;
     color: #ffffff;

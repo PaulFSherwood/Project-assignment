@@ -12,12 +12,24 @@ from matplotlib.figure import Figure
 
 import numpy as np
 
+
+import mysql.connector
+
+
 # import random
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         uic.loadUi('show-hide-test.ui', self)
+
+        # Connect to the MySQL database
+        self.db = mysql.connector.connect(
+            host='localhost',
+            user='sherwood',
+            password='sherwood',
+            database='flight_simulator_db'
+        )
 
         ############################################################################################################
         # ICON SETUP
@@ -59,6 +71,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load_inventory_data()
         self.load_charts_data()
 
+    def execute_query(self, query):
+        # Connection to the flight sim database
+        db = mysql.connector.connect(
+            host='localhost',
+            user='sherwood',
+            password='sherwood',
+            database='flight_simulator_db'
+        )
+        # Create the cursor for the look in the db
+        cursor = db.cursor()
+        # Execute the query passed in by the user / function
+        cursor.execute(query)
+        # save the result
+        result = cursor.fetchall()
+        # close the connection
+        cursor.close()
+        db.close()
+        return result
+    
 
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
@@ -101,6 +132,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setVisible(True)
         self.canvas.draw()
 
+    def set_priority_counts(self):
+        query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
+        cursor = self.db.cursor()  # this could have been cursor.execute(query)
+        
     def set_awp(self):
         # set pri_1_count label
         self.set_1_count.setText(str("HDD needs to be replaced"))
@@ -150,12 +185,14 @@ class MainWindow(QtWidgets.QMainWindow):
             self.cost_lower_table.setItem(parts_data.index(user), 3, QtWidgets.QTableWidgetItem(user["date"]))
         
     def load_work_order_data(self):
-        # Sample data for the work order table (JCN, Reason, User, Priority, Notes)
-        work_order_data = [{"jcn": "202306061630", "reason": "Can't see textures", "user": "John", "priority": "1", "notes": "While flying around atlanta we could not see ground textures but we could see the sky."},\
-                           {"jcn": "202306061700", "reason": "Daily Preflight", "user": "Jane", "priority": "3", "notes": "Preflight"},\
-                           {"jcn": "202306062015", "reason": "ILS not present", "user": "Bob", "priority": "3", "notes": "Flying ILS 27R at KSFO could not capture ILS GS.  No GS bar, but AP would engage"},\
-                           {"jcn": "202306062030", "reason": "Sim would not start", "user": "Mary", "priority": "1", "notes": ""},\
-                           {"jcn": "202306062230", "reason": "Oil test required", "user": "Mike", "priority": "3", "notes": "Sent oil sample to lab for testing"}]
+
+        # Execute the query to fetch the data
+        query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM WorkOrders"
+
+
+        # Fetch all the rows returned by the query
+        work_order_data = self.execute_query(query)
+
         # set the number of rows
         self.work_order_table.setRowCount(len(work_order_data))
         # hide row numbers
@@ -167,21 +204,36 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_order_table.setColumnWidth(3, 100) # Priority
         # resize "Notes" column to fill remaining space
         self.work_order_table.horizontalHeader().setSectionResizeMode(4, QtWidgets.QHeaderView.Stretch)
+
+        # push data into the table
+        row_index = 0  # Initialize the row index
         # push data into the table
         for work_order in work_order_data:
-            self.work_order_table.setItem(work_order_data.index(work_order), 0, QtWidgets.QTableWidgetItem(work_order["jcn"]))
-            self.work_order_table.setItem(work_order_data.index(work_order), 1, QtWidgets.QTableWidgetItem(work_order["reason"]))
-            self.work_order_table.setItem(work_order_data.index(work_order), 2, QtWidgets.QTableWidgetItem(work_order["user"]))
-            self.work_order_table.setItem(work_order_data.index(work_order), 3, QtWidgets.QTableWidgetItem(work_order["priority"]))
-            self.work_order_table.setItem(work_order_data.index(work_order), 4, QtWidgets.QTableWidgetItem(work_order["notes"]))
+            self.work_order_table.setItem(row_index, 0, QtWidgets.QTableWidgetItem(str(work_order[0])))  # jcn
+            self.work_order_table.setItem(row_index, 1, QtWidgets.QTableWidgetItem(work_order[1]))  # creation_reason
+            self.work_order_table.setItem(row_index, 2, QtWidgets.QTableWidgetItem(work_order[2]))  # reported_by_name
+            
+            # Center the priority number
+            priority_item = QtWidgets.QTableWidgetItem(str(work_order[3]))  # priority
+            priority_item.setTextAlignment(Qt.AlignmentFlag.AlignCenter)  # Center the content
+            self.work_order_table.setItem(row_index, 3, priority_item)
+            
+            self.work_order_table.setItem(row_index, 4, QtWidgets.QTableWidgetItem(work_order[4]))  # notes
+            row_index += 1  # Increment the row index
+
+
         # if the priority is 1, set the background color of that priority cell to red
         for row in range(self.work_order_table.rowCount()):
-            if self.work_order_table.item(row, 3).text() == "1":
-                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(255, 0, 0))
-            elif self.work_order_table.item(row, 3).text() == "2":
-                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(255, 255, 0))
-            elif self.work_order_table.item(row, 3).text() == "3":
-                self.work_order_table.item(row, 3).setBackground(QtGui.QColor(0, 255, 0))
+            priority_item = self.work_order_table.item(row, 3)
+            priority = priority_item.text()
+            if priority == "1":
+                priority_item.setBackground(QtGui.QColor(255, 0, 0))
+            elif priority == "2":
+                priority_item.setBackground(QtGui.QColor(255, 255, 0))
+            elif priority == "3":
+                priority_item.setBackground(QtGui.QColor(0, 255, 0))
+
+
 
     def load_inventory_data(self):
         # Sample data for the inventory table (Amount, Name, Min Stock, Location, Cost, Employee)
