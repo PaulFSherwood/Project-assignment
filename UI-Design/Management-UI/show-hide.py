@@ -48,7 +48,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.display_sample_bar_chart()
         QTimer.singleShot(0, lambda: self.resizeEvent(None)) # force resize on start
-        self.set_awp()
+        self.set_awaiting_approval()
 
         # set right_menu_widget as hidden when starting the application
         self.right_menu_widget.setHidden(True)
@@ -71,6 +71,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load_inventory_data()
         self.load_charts_data()
 
+        self.set_priority_counts()
+
     def execute_query(self, query):
         # Connection to the flight sim database
         db = mysql.connector.connect(
@@ -90,7 +92,6 @@ class MainWindow(QtWidgets.QMainWindow):
         db.close()
         return result
     
-
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
@@ -134,15 +135,37 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
-        cursor = self.db.cursor()  # this could have been cursor.execute(query)
+        result = self.execute_query(query)
+
+        # Store the counts
+        priority_totals = {}
+        for priority_count in result:
+            priority = priority_count[0]
+            count = priority_count[1]
+            priority_totals[priority] = count
+
+        # set pri_1_count
+        self.pri_1_count.setText(str(priority_totals[1]))
+        # set pri_2_count
+        self.pri_2_count.setText(str(priority_totals[2]))
+        # set pri_3_count
+        self.pri_3_count.setText(str(priority_totals[3]))
         
-    def set_awp(self):
-        # set pri_1_count label
-        self.set_1_count.setText(str("HDD needs to be replaced"))
-        self.set_2_count.setText(str("Preflight"))
-        self.set_3_count.setText(str("Purchase request"))
-        self.set_4_count.setText(str("Awaiting Engineering"))
-        self.set_5_count.setText(str("..."))
+    def set_awaiting_approval(self):
+        query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
+        result = self.execute_query(query)
+
+        for i, work_order in enumerate(result):
+            label_name = f"set_{i+1}_count"  # Assuming the QLabel attribute names follow the pattern set_1_count, set_2_count, etc.
+            label = getattr(self, label_name, None)
+            if label is not None:
+                label.setText(str(work_order[0]))
+        # # set pri_1_count label
+        # self.set_1_count.setText(str("HDD needs to be replaced"))
+        # self.set_2_count.setText(str("Preflight"))
+        # self.set_3_count.setText(str("Purchase request"))
+        # self.set_4_count.setText(str("Awaiting Engineering"))
+        # self.set_5_count.setText(str("..."))
 
     ############################################################################################################
     # LOAD TABLE DATA
