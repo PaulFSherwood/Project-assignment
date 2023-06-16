@@ -1130,22 +1130,22 @@ QTableView::item:hover {
                <widget class="QTableWidget" name="cost_lower_table">
                 <column>
                  <property name="text">
-                  <string>User</string>
+                  <string>Item Name</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Part</string>
+                  <string>Cost</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>New Column</string>
+                  <string>Date Due</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Date</string>
+                  <string>Priority</string>
                  </property>
                 </column>
                </widget>

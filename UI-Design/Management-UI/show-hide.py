@@ -172,41 +172,39 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_table_data(self):
         #########################
         ## UPPER TABLE
-        # Sample data for the man hours table (User, Hours Worked, Cost)
-        man_hours_data = [{"user": "John", "hours_worked": 4, "cost": 100},\
-                          {"user": "Jane", "hours_worked": 2, "cost": 50},\
-                          {"user": "Bob", "hours_worked": 1, "cost": 25},\
-                          {"user": "Mary", "hours_worked": 5, "cost": 125},\
-                          {"user": "Mike", "hours_worked": 3, "cost": 75}]
+        topQuery = "CALL GetTechSummary()"
+        tech_cost_data = self.execute_query(topQuery)
+
+        print(type(tech_cost_data))
+
         # set the number of rows
-        self.cost_upper_table.setRowCount(len(man_hours_data))
+        self.cost_upper_table.setRowCount(len(tech_cost_data))
         # hide row numbers
         self.cost_upper_table.verticalHeader().setVisible(False)
+
         # push data into the table
-        for user in man_hours_data:
-            self.cost_upper_table.setItem(man_hours_data.index(user), 0, QtWidgets.QTableWidgetItem(user["user"]))
-            self.cost_upper_table.setItem(man_hours_data.index(user), 1, QtWidgets.QTableWidgetItem(str(user["hours_worked"])))
-            self.cost_upper_table.setItem(man_hours_data.index(user), 2, QtWidgets.QTableWidgetItem(str(user["cost"])))
-        
+        for i, record in enumerate(tech_cost_data):
+            self.cost_upper_table.setItem(i, 0, QtWidgets.QTableWidgetItem(record[0]))      # tech name
+            self.cost_upper_table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(record[1]))) # total cost
+            self.cost_upper_table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(record[1]))) # total hours
+
         #########################
         ## LOWER TABLE
-        # Sample data for the parts table (User, Part, Price, Date)
-        parts_data = [{"user": "John", "part": "HDD", "price": 100, "date": "2021-01-01"},\
-                        {"user": "Jane", "part": "RAM", "price": 50, "date": "2021-01-02"},\
-                        {"user": "Bob", "part": "CPU", "price": 25, "date": "2021-01-03"},\
-                        {"user": "Mary", "part": "GPU", "price": 125, "date": "2021-01-04"},\
-                        {"user": "Mike", "part": "PSU", "price": 75, "date": "2021-01-05"}]
+        bottomQuery =  "CALL show_parts_data()"
+        parts_data = self.execute_query(bottomQuery)
         # set the number of rows
         self.cost_lower_table.setRowCount(len(parts_data))
         # hide row numbers
         self.cost_lower_table.verticalHeader().setVisible(False)
         # push data into the table
-        for user in parts_data:
-            self.cost_lower_table.setItem(parts_data.index(user), 0, QtWidgets.QTableWidgetItem(user["user"]))
-            self.cost_lower_table.setItem(parts_data.index(user), 1, QtWidgets.QTableWidgetItem(user["part"]))
-            self.cost_lower_table.setItem(parts_data.index(user), 2, QtWidgets.QTableWidgetItem(str(user["price"])))
-            self.cost_lower_table.setItem(parts_data.index(user), 3, QtWidgets.QTableWidgetItem(user["date"]))
-        
+        # push data into the table
+        for i, record in enumerate(parts_data):
+            self.cost_lower_table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(record[0])))  # item name
+            self.cost_lower_table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(record[1])))  # cost per item
+            self.cost_lower_table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(record[2])))  # due date
+            self.cost_lower_table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(record[3])))  # priority
+
+
     def load_work_order_data(self):
 
         # Execute the query to fetch the data
@@ -255,8 +253,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 priority_item.setBackground(QtGui.QColor(255, 255, 0))
             elif priority == "3":
                 priority_item.setBackground(QtGui.QColor(0, 255, 0))
-
-
 
     def load_inventory_data(self):
         # Sample data for the inventory table (Amount, Name, Min Stock, Location, Cost, Employee)
