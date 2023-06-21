@@ -74,6 +74,7 @@ build/
 *.log
 *.vspscc
 *.vscode
+UI-Design/Management-UI/.vscode
 *.vssscc
 .builds
 *.pidb
