@@ -2,7 +2,7 @@ from PyQt6 import QtWidgets, uic, QtCore, QtGui
 from PyQt6.QtCore import Qt, QPointF, QTimer
 from PyQt6.QtGui import QBrush, QColor, QPainter, QPen
 
-from PyQt6.QtCharts import QChart, QChartView, QLineSeries
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries
 import qtawesome as qta
 import sys
 
@@ -106,6 +106,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setGeometry(self.dashboard_frame_left.rect())
         if event:
             event.accept()
+        if hasattr(self, 'chartview'):
+            self.chartview.resize(self.chart_top.size())
+        super().resizeEvent(event)
 
     def display_sample_bar_chart(self):
         # Generate sample data for the bar chart
@@ -300,50 +303,37 @@ class MainWindow(QtWidgets.QMainWindow):
         series.append(3, 8)
         series.append(7, 4)
         series.append(10, 5)
-        series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
-               << QPointF(18, 3) << QPointF(20, 2)
+        # series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
+        #        << QPointF(18, 3) << QPointF(20, 2)
 
         chart = QChart()
         chart.addSeries(series)
         chart.createDefaultAxes()
 
-        chartview = QChartView()
-        chartview.setChart(chart)
-        chartview.setRenderHint(QPainter.Antialiasing)
+        self.chartview = QChartView()
+        self.chartview.setChart(chart)
+        self.chartview.setRenderHint(QPainter.Antialiasing)
 
-        chartview.setParent(self.chart_top)
-        chartview.resize(self.chart_top.size())
+        self.chartview.setParent(self.chart_top)
+        self.chartview.resize(self.chart_top.size())
 
 
-        
-        # # Generate sample data for the bar chart
-        # labels = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        # data = [0, 250, 1500, 2500, 250, 1000, 0]
+        ## Bottom chart
+        series = QPieSeries()
+        series.append("Shift 1", 2)
+        series.append("Shift 2", 3)
+        series.append("Shift 3", 1)
 
-        # # Create a figure and axis for the bar chart
-        # fig = Figure()
-        # ax = fig.add_subplot(111)
+        chart = QChart()
+        chart.addSeries(series)
+        chart.setTitle("Work load by shift")
 
-        # # Set the positions of the bars on the x-axis
-        # x = np.arange(len(labels))
+        self.chartview = QChartView()
+        self.chartview.setChart(chart)
+        self.chartview.setRenderHint(QPainter.Antialiasing)
 
-        # # Plot the bar chart
-        # ax.bar(x, data)
-
-        # # Set labels and title
-        # ax.set_xlabel('Categories')
-        # ax.set_ylabel('Values')
-        # ax.set_title('Sample Bar Chart')
-
-        # # Create a FigureCanvas widget for the plot
-        # canvas = FigureCanvas(fig)
-        # canvas.setParent(self.chart_top)
-        # canvas.setGeometry(self.chart_top.rect())
-        # # canvas.setGeometry(self.rect())
-
-        # # Show the canvas and redraw
-        # canvas.setVisible(True)
-        # canvas.draw()
+        self.chartview.setParent(self.chart_bottom)
+        self.chartview.resize(self.chart_bottom.size())
 
 
 
