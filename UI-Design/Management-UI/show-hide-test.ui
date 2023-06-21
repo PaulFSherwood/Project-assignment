@@ -192,6 +192,7 @@ QTableView::item:hover {
            <widget class="QPushButton" name="pushButton_7">
             <property name="font">
              <font>
+              <family>Verdana</family>
               <pointsize>-1</pointsize>
               <bold>true</bold>
              </font>
@@ -414,6 +415,7 @@ QTableView::item:hover {
               <widget class="QLabel" name="title_label">
                <property name="font">
                 <font>
+                 <family>Cambria</family>
                  <pointsize>26</pointsize>
                  <italic>false</italic>
                  <bold>true</bold>
@@ -494,7 +496,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>3</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -530,6 +532,7 @@ QTableView::item:hover {
                    </property>
                    <property name="font">
                     <font>
+                     <family>Candara</family>
                      <pointsize>14</pointsize>
                      <italic>false</italic>
                      <bold>true</bold>
@@ -1305,6 +1308,7 @@ QTableView::item:hover {
             </property>
             <property name="font">
              <font>
+              <family>Verdana</family>
               <pointsize>-1</pointsize>
               <bold>true</bold>
              </font>

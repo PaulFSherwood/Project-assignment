@@ -1,7 +1,8 @@
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QPointF, QTimer
+from PyQt6.QtGui import QBrush, QColor, QPainter, QPen
 
-from PyQt6.QtCore import QTimer
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries
 import qtawesome as qta
 import sys
 
@@ -73,6 +74,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.set_priority_counts()
 
+    ############################################################################################################
+    # SQL FUNCTION
     def execute_query(self, query):
         # Connection to the flight sim database
         db = mysql.connector.connect(
@@ -92,6 +95,8 @@ class MainWindow(QtWidgets.QMainWindow):
         db.close()
         return result
     
+    ############################################################################################################
+    # ASORTED FUNCTIONS
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
@@ -133,6 +138,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setVisible(True)
         self.canvas.draw()
 
+    ############################################################################################################
+    # TABS
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
         result = self.execute_query(query)
@@ -200,7 +207,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.cost_lower_table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(record[1])))  # cost per item
             self.cost_lower_table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(record[2])))  # due date
             self.cost_lower_table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(record[3])))  # priority
-
 
     def load_work_order_data(self):
 
@@ -285,39 +291,60 @@ class MainWindow(QtWidgets.QMainWindow):
                 stock_on_hand_item.setBackground(QtGui.QColor(255, 0, 0))
                 minimum_stock_number_item.setBackground(QtGui.QColor(255, 0, 0))
 
-                
-
+    #############################################################################################################
+    # LOAD CHARTS DATA     
     def load_charts_data(self):
-        # Load a sample bar chart into chart_top (sun,mon,tue, wed, thu, fri, sat) (0, scale to highest value) label Operating cost
+        series = QLineSeries(self)
+        series.append(0, 6)
+        series.append(2, 4)
+        series.append(3, 8)
+        series.append(7, 4)
+        series.append(10, 5)
+        series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
+               << QPointF(18, 3) << QPointF(20, 2)
 
-        # Generate sample data for the bar chart
-        labels = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-        data = [0, 250, 1500, 2500, 250, 1000, 0]
+        chart = QChart()
+        chart.addSeries(series)
+        chart.createDefaultAxes()
 
-        # Create a figure and axis for the bar chart
-        fig = Figure()
-        ax = fig.add_subplot(111)
+        chartview = QChartView()
+        chartview.setChart(chart)
+        chartview.setRenderHint(QPainter.Antialiasing)
 
-        # Set the positions of the bars on the x-axis
-        x = np.arange(len(labels))
+        chartview.setParent(self.chart_top)
+        chartview.resize(self.chart_top.size())
 
-        # Plot the bar chart
-        ax.bar(x, data)
 
-        # Set labels and title
-        ax.set_xlabel('Categories')
-        ax.set_ylabel('Values')
-        ax.set_title('Sample Bar Chart')
+        
+        # # Generate sample data for the bar chart
+        # labels = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+        # data = [0, 250, 1500, 2500, 250, 1000, 0]
 
-        # Create a FigureCanvas widget for the plot
-        canvas = FigureCanvas(fig)
-        canvas.setParent(self.chart_top)
-        canvas.setGeometry(self.chart_top.rect())
-        # canvas.setGeometry(self.rect())
+        # # Create a figure and axis for the bar chart
+        # fig = Figure()
+        # ax = fig.add_subplot(111)
 
-        # Show the canvas and redraw
-        canvas.setVisible(True)
-        canvas.draw()
+        # # Set the positions of the bars on the x-axis
+        # x = np.arange(len(labels))
+
+        # # Plot the bar chart
+        # ax.bar(x, data)
+
+        # # Set labels and title
+        # ax.set_xlabel('Categories')
+        # ax.set_ylabel('Values')
+        # ax.set_title('Sample Bar Chart')
+
+        # # Create a FigureCanvas widget for the plot
+        # canvas = FigureCanvas(fig)
+        # canvas.setParent(self.chart_top)
+        # canvas.setGeometry(self.chart_top.rect())
+        # # canvas.setGeometry(self.rect())
+
+        # # Show the canvas and redraw
+        # canvas.setVisible(True)
+        # canvas.draw()
+
 
 
 
