@@ -96,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
         return result
     
     ############################################################################################################
-    # ASORTED FUNCTIONS
+    # DASHBOARD FUNCTIONS
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
@@ -106,8 +106,10 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setGeometry(self.dashboard_frame_left.rect())
         if event:
             event.accept()
-        if hasattr(self, 'chartview'):
-            self.chartview.resize(self.chart_top.size())
+        if hasattr(self, 'topChartview'):
+            self.topChartview.resize(self.chart_top.size())
+        if hasattr(self, 'bottomChartview'):
+            self.bottomChartview.resize(self.chart_bottom.size())
         super().resizeEvent(event)
 
     def display_sample_bar_chart(self):
@@ -135,7 +137,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.canvas.setParent(self.dashboard_frame_left)
         # self.canvas.setGeometry(self.rect())
         self.canvas.setGeometry(self.dashboard_frame_left.rect())
-        
 
         # Show the canvas and redraw
         self.canvas.setVisible(True)
@@ -297,43 +298,43 @@ class MainWindow(QtWidgets.QMainWindow):
     #############################################################################################################
     # LOAD CHARTS DATA     
     def load_charts_data(self):
-        series = QLineSeries(self)
-        series.append(0, 6)
-        series.append(2, 4)
-        series.append(3, 8)
-        series.append(7, 4)
-        series.append(10, 5)
-        # series << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
+        topSeries = QLineSeries(self)
+        topSeries.append(0, 6)
+        topSeries.append(2, 4)
+        topSeries.append(3, 8)
+        topSeries.append(7, 4)
+        topSeries.append(10, 5)
+        # topSeries << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
         #        << QPointF(18, 3) << QPointF(20, 2)
 
-        chart = QChart()
-        chart.addSeries(series)
-        chart.createDefaultAxes()
+        topChart = QChart()
+        topChart.addSeries(topSeries)
+        topChart.createDefaultAxes()
 
-        self.chartview = QChartView()
-        self.chartview.setChart(chart)
-        self.chartview.setRenderHint(QPainter.Antialiasing)
+        self.topChartview = QChartView()
+        self.topChartview.setChart(topChart)
+        self.topChartview.setRenderHint(QPainter.Antialiasing)
 
-        self.chartview.setParent(self.chart_top)
-        self.chartview.resize(self.chart_top.size())
+        self.topChartview.setParent(self.chart_top)
+        self.topChartview.resize(self.chart_top.size())
 
 
         ## Bottom chart
-        series = QPieSeries()
-        series.append("Shift 1", 2)
-        series.append("Shift 2", 3)
-        series.append("Shift 3", 1)
+        bottomSeries = QPieSeries()
+        bottomSeries.append("Shift 1", 2)
+        bottomSeries.append("Shift 2", 3)
+        bottomSeries.append("Shift 3", 1)
 
-        chart = QChart()
-        chart.addSeries(series)
-        chart.setTitle("Work load by shift")
+        bottomChart = QChart()
+        bottomChart.addSeries(bottomSeries)
+        bottomChart.setTitle("Work load by shift")
 
-        self.chartview = QChartView()
-        self.chartview.setChart(chart)
-        self.chartview.setRenderHint(QPainter.Antialiasing)
+        self.bottomChartview = QChartView()
+        self.bottomChartview.setChart(bottomChart)
+        self.bottomChartview.setRenderHint(QPainter.Antialiasing)
 
-        self.chartview.setParent(self.chart_bottom)
-        self.chartview.resize(self.chart_bottom.size())
+        self.bottomChartview.setParent(self.chart_bottom)
+        self.bottomChartview.resize(self.chart_bottom.size())
 
 
 
