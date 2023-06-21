@@ -2,7 +2,10 @@ from PyQt6 import QtWidgets, uic, QtCore, QtGui
 from PyQt6.QtCore import Qt, QPointF, QTimer
 from PyQt6.QtGui import QBrush, QColor, QPainter, QPen
 
-from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet, QBarSeries, QBarCategoryAxis
+from PyQt6.QtGui import QPainter, QPen, QBrush, QFont
+from PyQt6.QtCore import Qt, QPointF
+
 import qtawesome as qta
 import sys
 
@@ -103,44 +106,49 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def resizeEvent(self, event):
         # print("frame_16 size:", self.size())  # Print the size of frame_16
-        self.canvas.setGeometry(self.dashboard_frame_left.rect())
+        # self.canvas.setGeometry(self.dashboard_frame_left.rect())
         if event:
             event.accept()
+        if hasattr(self, 'dashBoardSeries'):
+            self.dashBoardSeries.resize(self.dashboard_frame_left.size())
         if hasattr(self, 'topChartview'):
             self.topChartview.resize(self.chart_top.size())
         if hasattr(self, 'bottomChartview'):
             self.bottomChartview.resize(self.chart_bottom.size())
         super().resizeEvent(event)
 
+    ############################################################################################################
+    # Helper Function
+    def create_bar_set(self, label, value):
+        barSet = QBarSet(label)
+        barSet.append(value)
+        return barSet
+    
     def display_sample_bar_chart(self):
-        # Generate sample data for the bar chart
-        self.labels = ['A', 'B', 'C', 'D', 'E']
-        self.data = [10, 5, 8, 12, 3]
+        # use QBarSeries for bar chart sample
+        dashBoardBarSeries = QBarSeries(self)
+        dashBoardBarSeries.append(self.create_bar_set("A", 10))
+        dashBoardBarSeries.append(self.create_bar_set("B", 5))
+        dashBoardBarSeries.append(self.create_bar_set("C", 8))
+        dashBoardBarSeries.append(self.create_bar_set("D", 12))
+        dashBoardBarSeries.append(self.create_bar_set("E", 3))
 
-        # Create a figure and axis for the bar chart
-        self.fig = Figure()
-        self.ax = self.fig.add_subplot(111)
+        dashBoardSeries = QChart()
+        dashBoardSeries.addSeries(dashBoardBarSeries)
+        dashBoardSeries.createDefaultAxes()
 
-        # Set the positions of the bars on the x-axis
-        self.x = np.arange(len(self.labels))
+        self.dashBoardChartView = QChartView()
+        self.dashBoardChartView.setChart(dashBoardSeries)
+        self.dashBoardChartView.setRenderHint(QPainter.Antialiasing)
 
-        # Plot the bar chart
-        self.ax.bar(self.x, self.data)
+        self.dashBoardChartView.setParent(self.dashboard_frame_left)
+        self.dashBoardChartView.resize(self.dashboard_frame_left.size())
+        # print("Frame width: ", self.dashboard_frame_left.width())
+        # print("Frame height: ", self.dashboard_frame_left.height())
+        # print("Chart width: ", self.dashBoardChartView.width())
+        # print("Chart height: ", self.dashBoardChartView.height())
 
-        # Set labels and title
-        self.ax.set_xlabel('Categories')
-        self.ax.set_ylabel('Values')
-        self.ax.set_title('Sample Bar Chart')
 
-        # Create a FigureCanvas widget for the plot
-        self.canvas = FigureCanvas(self.fig)
-        self.canvas.setParent(self.dashboard_frame_left)
-        # self.canvas.setGeometry(self.rect())
-        self.canvas.setGeometry(self.dashboard_frame_left.rect())
-
-        # Show the canvas and redraw
-        self.canvas.setVisible(True)
-        self.canvas.draw()
 
     ############################################################################################################
     # TABS
