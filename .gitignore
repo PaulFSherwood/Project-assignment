@@ -75,6 +75,7 @@ build/
 *.vspscc
 *.vscode
 UI-Design/Management-UI/.vscode
+Project-assignment/UI-Design/Management-UI/.vscode
 *.vssscc
 .builds
 *.pidb
