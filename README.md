@@ -20,7 +20,7 @@ The following tasks are yet to be completed for the project:
 ![Application Preview](images/application-dashboard.jpg)
 ![Application Preview](images/application-cost.jpg)
 ![Application Preview](images/application-workOrders.jpg)
-![Application Preview](images/application-Inventory.jpg)
+![Application Preview](images/application-inventory.jpg)
 
 This screenshot provides a preview of the application's user interface.
 
