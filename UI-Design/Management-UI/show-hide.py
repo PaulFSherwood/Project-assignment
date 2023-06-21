@@ -172,8 +172,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_table_data(self):
         #########################
         ## UPPER TABLE
-        topQuery = "CALL GetTechSummary()"
-        tech_cost_data = self.execute_query(topQuery)
+        tech_cost_data = self.execute_query("CALL GetTechSummary()")
 
         print(type(tech_cost_data))
 
@@ -190,13 +189,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #########################
         ## LOWER TABLE
-        bottomQuery =  "CALL show_parts_data()"
-        parts_data = self.execute_query(bottomQuery)
+        parts_data = self.execute_query("CALL show_parts_data()")
         # set the number of rows
         self.cost_lower_table.setRowCount(len(parts_data))
         # hide row numbers
         self.cost_lower_table.verticalHeader().setVisible(False)
-        # push data into the table
         # push data into the table
         for i, record in enumerate(parts_data):
             self.cost_lower_table.setItem(i, 0, QtWidgets.QTableWidgetItem(str(record[0])))  # item name
@@ -248,19 +245,19 @@ class MainWindow(QtWidgets.QMainWindow):
             priority_item = self.work_order_table.item(row, 3)
             priority = priority_item.text()
             if priority == "1":
-                priority_item.setBackground(QtGui.QColor(255, 0, 0))
+                priority_item.setBackground(QtGui.QColor(255, 0, 0))  # Red background
+                priority_item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))  # White text color
             elif priority == "2":
-                priority_item.setBackground(QtGui.QColor(255, 255, 0))
+                priority_item.setBackground(QtGui.QColor(255, 255, 0))  # Yellow background
+                priority_item.setForeground(QtGui.QBrush(QtGui.QColor(0, 0, 0)))  # Black text color
             elif priority == "3":
-                priority_item.setBackground(QtGui.QColor(0, 255, 0))
+                priority_item.setBackground(QtGui.QColor(0, 255, 0))  # Green background
+                priority_item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))  # White text color
 
     def load_inventory_data(self):
-        # Sample data for the inventory table (Amount, Name, Min Stock, Location, Cost, Employee)
-        inventory_data = [{"amount": 5, "name": "HDD", "min_stock": 5, "location": "61A", "cost": 100, "employee": "John"},\
-                            {"amount": 1, "name": "RAM", "min_stock": 10, "location": "4", "cost": 50, "employee": "Jane"},\
-                            {"amount": 15, "name": "CPU", "min_stock": 15, "location": "66F", "cost": 25, "employee": "Bob"},\
-                            {"amount": 2, "name": "GPU", "min_stock": 5, "location": "12D", "cost": 125, "employee": "Mary"},\
-                            {"amount": 10, "name": "PSU", "min_stock": 10, "location": "1", "cost": 75, "employee": "Mike"}]
+        # Execute the query to fetch the data       
+        inventory_data = self.execute_query("CALL GetInventoryData()")
+
         # set the number of rows
         self.inventory_table.setRowCount(len(inventory_data))
         # hide row numbers
@@ -270,16 +267,25 @@ class MainWindow(QtWidgets.QMainWindow):
             self.inventory_table.setColumnWidth(column, 100)
 
         # push data into the table
-        for inventory in inventory_data:
-            self.inventory_table.setItem(inventory_data.index(inventory), 0, QtWidgets.QTableWidgetItem(str(inventory["amount"])))
-            self.inventory_table.setItem(inventory_data.index(inventory), 1, QtWidgets.QTableWidgetItem(inventory["name"]))
-            self.inventory_table.setItem(inventory_data.index(inventory), 2, QtWidgets.QTableWidgetItem(str(inventory["min_stock"])))
-            self.inventory_table.setItem(inventory_data.index(inventory), 3, QtWidgets.QTableWidgetItem(inventory["location"]))
-            self.inventory_table.setItem(inventory_data.index(inventory), 4, QtWidgets.QTableWidgetItem(str(inventory["cost"])))
-            self.inventory_table.setItem(inventory_data.index(inventory), 5, QtWidgets.QTableWidgetItem(inventory["employee"]))
+        for i, inventory in enumerate(inventory_data):
+            self.inventory_table.setItem(i, 0, QtWidgets.QTableWidgetItem(inventory[1]))  # item_name
+            self.inventory_table.setItem(i, 1, QtWidgets.QTableWidgetItem(str(inventory[0])))  # stock_on_hand
+            self.inventory_table.setItem(i, 2, QtWidgets.QTableWidgetItem(str(inventory[2])))  # minimum_stock_number
+            self.inventory_table.setItem(i, 3, QtWidgets.QTableWidgetItem(inventory[3]))  # stock_location
+            self.inventory_table.setItem(i, 4, QtWidgets.QTableWidgetItem(str(inventory[4])))  # cost_per_item
+            self.inventory_table.setItem(i, 5, QtWidgets.QTableWidgetItem(inventory[5]))  # username
 
         # if the inventory amount is less than the minimum stock, set the background color of that cell to light red
-        ## TODO: This is not working
+        for row in range(self.inventory_table.rowCount()):
+            stock_on_hand_item = self.inventory_table.item(row, 1)
+            stock_on_hand = stock_on_hand_item.text()
+            minimum_stock_number_item = self.inventory_table.item(row, 2)
+            minimum_stock_number = minimum_stock_number_item.text()
+            if int(stock_on_hand) < int(minimum_stock_number):
+                stock_on_hand_item.setBackground(QtGui.QColor(255, 0, 0))
+                minimum_stock_number_item.setBackground(QtGui.QColor(255, 0, 0))
+
+                
 
     def load_charts_data(self):
         # Load a sample bar chart into chart_top (sun,mon,tue, wed, thu, fri, sat) (0, scale to highest value) label Operating cost

@@ -494,7 +494,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>4</number>
+             <number>3</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1191,17 +1191,12 @@ QTableView::item:hover {
                <widget class="QTableWidget" name="inventory_table">
                 <column>
                  <property name="text">
-                  <string>New Column</string>
+                  <string>Discription</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
                   <string>Amount</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Name</string>
                  </property>
                 </column>
                 <column>
@@ -1212,6 +1207,11 @@ QTableView::item:hover {
                 <column>
                  <property name="text">
                   <string>Location</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>cost</string>
                  </property>
                 </column>
                 <column>
