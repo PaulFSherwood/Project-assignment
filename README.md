@@ -10,10 +10,12 @@ This project contains a management user interface (UI) for an application. The m
 The following tasks are yet to be completed for the project:
 
 1. Complete chart integration.
+  1a. Management charts are working but resize is not correct.
 2. Tie login functionality to the main application.
 3. Implement a function to allow users to add parts.
 4. Develop functions for users to add work orders.
 5. Create functions for users to sign off on work orders.
+6. DB login and access need to remove hardcoded passwords and update passwords
 
 ## Application Preview
 
