@@ -143,12 +143,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.dashBoardChartView.setParent(self.dashboard_frame_left)
         self.dashBoardChartView.resize(self.dashboard_frame_left.size())
-        # print("Frame width: ", self.dashboard_frame_left.width())
-        # print("Frame height: ", self.dashboard_frame_left.height())
-        # print("Chart width: ", self.dashBoardChartView.width())
-        # print("Chart height: ", self.dashBoardChartView.height())
-
-
 
     ############################################################################################################
     # TABS
@@ -179,19 +173,14 @@ class MainWindow(QtWidgets.QMainWindow):
             label = getattr(self, label_name, None)
             if label is not None:
                 label.setText(str(work_order[0]))
-        # # set pri_1_count label
-        # self.set_1_count.setText(str("HDD needs to be replaced"))
-        # self.set_2_count.setText(str("Preflight"))
-        # self.set_3_count.setText(str("Purchase request"))
-        # self.set_4_count.setText(str("Awaiting Engineering"))
-        # self.set_5_count.setText(str("..."))
 
     ############################################################################################################
     # LOAD TABLE DATA
     def load_table_data(self):
         #########################
         ## UPPER TABLE
-        tech_cost_data = self.execute_query("CALL GetTechSummary()")
+        query = "CALL GetTechSummary()"
+        tech_cost_data = self.execute_query(query)
 
         print(type(tech_cost_data))
 
@@ -225,7 +214,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Execute the query to fetch the data
         query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM WorkOrders"
 
-
         # Fetch all the rows returned by the query
         work_order_data = self.execute_query(query)
 
@@ -257,7 +245,6 @@ class MainWindow(QtWidgets.QMainWindow):
             self.work_order_table.setItem(row_index, 4, QtWidgets.QTableWidgetItem(work_order[4]))  # notes
             row_index += 1  # Increment the row index
 
-
         # if the priority is 1, set the background color of that priority cell to red
         for row in range(self.work_order_table.rowCount()):
             priority_item = self.work_order_table.item(row, 3)
@@ -273,8 +260,9 @@ class MainWindow(QtWidgets.QMainWindow):
                 priority_item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))  # White text color
 
     def load_inventory_data(self):
-        # Execute the query to fetch the data       
-        inventory_data = self.execute_query("CALL GetInventoryData()")
+        # Execute the query to fetch the data
+        query = "CALL GetInventoryData()"
+        inventory_data = self.execute_query(query)
 
         # set the number of rows
         self.inventory_table.setRowCount(len(inventory_data))
@@ -306,14 +294,17 @@ class MainWindow(QtWidgets.QMainWindow):
     #############################################################################################################
     # LOAD CHARTS DATA     
     def load_charts_data(self):
+        # Call DB stored procedure GetWorkOrderCountPerDay() to get the last 7 days of data
+        topQuery = "CALL GetWorkOrderCountPerDay()"
+        work_order_count_per_day_data = self.execute_query(topQuery)
+
+        # Send data to the QLineSeries chart
         topSeries = QLineSeries(self)
-        topSeries.append(0, 6)
-        topSeries.append(2, 4)
-        topSeries.append(3, 8)
-        topSeries.append(7, 4)
-        topSeries.append(10, 5)
-        # topSeries << QPointF(11, 1) << QPointF(13, 3) << QPointF(17, 6) \
-        #        << QPointF(18, 3) << QPointF(20, 2)
+        for i, work_order_count in enumerate(work_order_count_per_day_data):
+            x =  i 
+            y = work_order_count[1]
+            point = QPointF(x, y)
+            topSeries.append(point)
 
         topChart = QChart()
         topChart.addSeries(topSeries)
@@ -326,12 +317,21 @@ class MainWindow(QtWidgets.QMainWindow):
         self.topChartview.setParent(self.chart_top)
         self.topChartview.resize(self.chart_top.size())
 
-
         ## Bottom chart
+        bottomQuery = "CALL GetHoursWorkedPerPerson()"
+        hours_worked_per_person_data = self.execute_query(bottomQuery)
+
+
         bottomSeries = QPieSeries()
-        bottomSeries.append("Shift 1", 2)
-        bottomSeries.append("Shift 2", 3)
-        bottomSeries.append("Shift 3", 1)
+        for row in hours_worked_per_person_data:
+            username = row[0]
+            total_hours = row[1]
+            bottomSeries.append(username, total_hours)
+
+        # bottomSeries = QPieSeries()
+        # bottomSeries.append("Shift 1", 2)
+        # bottomSeries.append("Shift 2", 3)
+        # bottomSeries.append("Shift 3", 1)
 
         bottomChart = QChart()
         bottomChart.addSeries(bottomSeries)
@@ -343,8 +343,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.bottomChartview.setParent(self.chart_bottom)
         self.bottomChartview.resize(self.chart_bottom.size())
-
-
 
 
 if __name__ == "__main__":
