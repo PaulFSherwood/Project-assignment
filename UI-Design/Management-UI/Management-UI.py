@@ -102,13 +102,13 @@ class MainWindow(QtWidgets.QMainWindow):
             self.dashBoardChartView.show()
             # print("Chart dashBoard Size Hint:", self.dashBoardChartView.sizeHint())
             # print("Chart dashBoard Minimum Size:", self.dashBoardChartView.minimumSize())
-            
+
         if hasattr(self, 'topChartview'):
             self.topChartview.resize(self.chart_top.size())
             self.topChartview.show()
             # print("Chart topChartview Size Hint:", self.topChartview.sizeHint())
             # print("Chart topChartview Minimum Size:", self.topChartview.minimumSize())
-        
+
         if hasattr(self, 'bottomChartview'):
             self.bottomChartview.resize(self.chart_bottom.size())
             self.bottomChartview.show()
@@ -123,12 +123,11 @@ class MainWindow(QtWidgets.QMainWindow):
         barSet = QBarSet(label)
         barSet.append(value)
         return barSet
-    
+
     def dashboard_bar_chart(self):
-        
+
         dashQuery = "CALL GetWorkOrderCountPerDay()"
         work_order_count_per_day = self.execute_query(dashQuery)
-
 
         dashBoardBarSeries = QBarSeries(self)
 
@@ -149,7 +148,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.resize(self.dashboard_frame_left.size())
         self.dashBoardChartView.show()
 
-
     ############################################################################################################
     # TABS
     def set_priority_counts(self):
@@ -169,7 +167,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pri_2_count.setText(str(priority_totals[2]))
         # set pri_3_count
         self.pri_3_count.setText(str(priority_totals[3]))
-        
+
     def set_awaiting_approval(self):
         query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
         result = self.execute_query(query)
