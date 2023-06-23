@@ -50,7 +50,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_orders_pushButton.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
         self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
 
-        self.display_sample_bar_chart()
+        self.dashboard_bar_chart()
         QTimer.singleShot(0, lambda: self.resizeEvent(None)) # force resize on start
         self.set_awaiting_approval()
 
@@ -109,12 +109,24 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.canvas.setGeometry(self.dashboard_frame_left.rect())
         if event:
             event.accept()
-        if hasattr(self, 'dashBoardSeries'):
-            self.dashBoardSeries.resize(self.dashboard_frame_left.size())
+        if hasattr(self, 'dashBoardChartView'):
+            self.dashBoardChartView.resize(self.dashboard_frame_left.size())
+            self.dashBoardChartView.show()
+            # print("Chart dashBoard Size Hint:", self.dashBoardChartView.sizeHint())
+            # print("Chart dashBoard Minimum Size:", self.dashBoardChartView.minimumSize())
+            
         if hasattr(self, 'topChartview'):
             self.topChartview.resize(self.chart_top.size())
+            self.topChartview.show()
+            # print("Chart topChartview Size Hint:", self.topChartview.sizeHint())
+            # print("Chart topChartview Minimum Size:", self.topChartview.minimumSize())
+        
         if hasattr(self, 'bottomChartview'):
             self.bottomChartview.resize(self.chart_bottom.size())
+            self.bottomChartview.show()
+            # print("Chart bottomChartview Size Hint:", self.bottomChartview.sizeHint())
+            # print("Chart bottomChartview Minimum Size:", self.bottomChartview.minimumSize())
+
         super().resizeEvent(event)
 
     ############################################################################################################
@@ -124,25 +136,31 @@ class MainWindow(QtWidgets.QMainWindow):
         barSet.append(value)
         return barSet
     
-    def display_sample_bar_chart(self):
-        # use QBarSeries for bar chart sample
-        dashBoardBarSeries = QBarSeries(self)
-        dashBoardBarSeries.append(self.create_bar_set("A", 10))
-        dashBoardBarSeries.append(self.create_bar_set("B", 5))
-        dashBoardBarSeries.append(self.create_bar_set("C", 8))
-        dashBoardBarSeries.append(self.create_bar_set("D", 12))
-        dashBoardBarSeries.append(self.create_bar_set("E", 3))
+    def dashboard_bar_chart(self):
+        
+        dashQuery = "CALL GetWorkOrderCountPerDay()"
+        work_order_count_per_day = self.execute_query(dashQuery)
 
-        dashBoardSeries = QChart()
-        dashBoardSeries.addSeries(dashBoardBarSeries)
-        dashBoardSeries.createDefaultAxes()
+
+        dashBoardBarSeries = QBarSeries(self)
+
+        for x, y in enumerate(work_order_count_per_day):
+            barSet = QBarSet(str(x))
+            barSet.append(y[1])
+            dashBoardBarSeries.append(barSet)
+
+        dashBoardChart = QChart()
+        dashBoardChart.addSeries(dashBoardBarSeries)
+        dashBoardChart.createDefaultAxes()
 
         self.dashBoardChartView = QChartView()
-        self.dashBoardChartView.setChart(dashBoardSeries)
+        self.dashBoardChartView.setChart(dashBoardChart)
         self.dashBoardChartView.setRenderHint(QPainter.Antialiasing)
 
         self.dashBoardChartView.setParent(self.dashboard_frame_left)
         self.dashBoardChartView.resize(self.dashboard_frame_left.size())
+        self.dashBoardChartView.show()
+
 
     ############################################################################################################
     # TABS
@@ -182,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
         query = "CALL GetTechSummary()"
         tech_cost_data = self.execute_query(query)
 
-        print(type(tech_cost_data))
+        print(tech_cost_data)
 
         # set the number of rows
         self.cost_upper_table.setRowCount(len(tech_cost_data))
@@ -300,10 +318,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Send data to the QLineSeries chart
         topSeries = QLineSeries(self)
-        for i, work_order_count in enumerate(work_order_count_per_day_data):
-            x =  i 
-            y = work_order_count[1]
-            point = QPointF(x, y)
+
+        for x, y in enumerate(work_order_count_per_day_data):
+            point = QPointF(x, y[1])
             topSeries.append(point)
 
         topChart = QChart()
@@ -316,6 +333,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.topChartview.setParent(self.chart_top)
         self.topChartview.resize(self.chart_top.size())
+        self.topChartview.show()
 
         ## Bottom chart
         bottomQuery = "CALL GetHoursWorkedPerPerson()"
@@ -328,11 +346,6 @@ class MainWindow(QtWidgets.QMainWindow):
             total_hours = row[1]
             bottomSeries.append(username, total_hours)
 
-        # bottomSeries = QPieSeries()
-        # bottomSeries.append("Shift 1", 2)
-        # bottomSeries.append("Shift 2", 3)
-        # bottomSeries.append("Shift 3", 1)
-
         bottomChart = QChart()
         bottomChart.addSeries(bottomSeries)
         bottomChart.setTitle("Work load by shift")
@@ -343,6 +356,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         self.bottomChartview.setParent(self.chart_bottom)
         self.bottomChartview.resize(self.chart_bottom.size())
+        self.bottomChartview.show()
 
 
 if __name__ == "__main__":
