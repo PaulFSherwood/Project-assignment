@@ -200,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
         query = "CALL GetTechSummary()"
         tech_cost_data = self.execute_query(query)
 
-        print(tech_cost_data)
+        # print(tech_cost_data)
 
         # set the number of rows
         self.cost_upper_table.setRowCount(len(tech_cost_data))
