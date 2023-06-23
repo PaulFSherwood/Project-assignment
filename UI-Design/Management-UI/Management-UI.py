@@ -1,31 +1,19 @@
-from PyQt6 import QtWidgets, uic, QtCore, QtGui
-from PyQt6.QtCore import Qt, QPointF, QTimer
-from PyQt6.QtGui import QBrush, QColor, QPainter, QPen
-
-from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet, QBarSeries, QBarCategoryAxis
-from PyQt6.QtGui import QPainter, QPen, QBrush, QFont
-from PyQt6.QtCore import Qt, QPointF
-
-import qtawesome as qta
-import sys
-
 import os
-# import sys
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-import numpy as np
-
-
+import sys
 import mysql.connector
 
+from PyQt6 import QtWidgets, uic, QtCore, QtGui
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet, QBarSeries
+from PyQt6.QtCore import Qt, QPointF, QTimer
+from PyQt6.QtGui import QPainter
 
-# import random
+import qtawesome as qta
+
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
-        uic.loadUi('show-hide-test.ui', self)
+        uic.loadUi('Management-UI.ui', self)
 
         # Connect to the MySQL database
         self.db = mysql.connector.connect(
