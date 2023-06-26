@@ -507,7 +507,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>2</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1586,19 +1586,6 @@ color: rgb(66, 8, 36);</string>
                          <string>JCN</string>
                         </property>
                        </widget>
-                       <widget class="QLabel" name="simulator_label_2">
-                        <property name="geometry">
-                         <rect>
-                          <x>0</x>
-                          <y>60</y>
-                          <width>121</width>
-                          <height>20</height>
-                         </rect>
-                        </property>
-                        <property name="text">
-                         <string>Simulator</string>
-                        </property>
-                       </widget>
                        <widget class="QLineEdit" name="JCN_lineEdit_2">
                         <property name="geometry">
                          <rect>
@@ -1629,23 +1616,6 @@ color: rgb(66, 8, 36);</string>
                          <string>Priority</string>
                         </property>
                        </widget>
-                       <widget class="QComboBox" name="simulator_comboBox">
-                        <property name="geometry">
-                         <rect>
-                          <x>-2</x>
-                          <y>80</y>
-                          <width>231</width>
-                          <height>31</height>
-                         </rect>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(148, 177, 255);
-border: 1px solid #000000;
-border-radius: 10px;
-font: 12pt &quot;Verdana&quot;;
-color: rgb(66, 8, 36);</string>
-                        </property>
-                       </widget>
                        <widget class="QComboBox" name="priority_comboBox">
                         <property name="geometry">
                          <rect>
@@ -1661,6 +1631,36 @@ border: 1px solid #000000;
 border-radius: 10px;
 font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="reportedBy_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>80</y>
+                          <width>231</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="reportedBy_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>0</x>
+                          <y>60</y>
+                          <width>101</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Reported By</string>
                         </property>
                        </widget>
                       </widget>
@@ -1824,7 +1824,7 @@ color: rgb(66, 8, 36);</string>
                         <property name="geometry">
                          <rect>
                           <x>10</x>
-                          <y>0</y>
+                          <y>70</y>
                           <width>81</width>
                           <height>20</height>
                          </rect>
@@ -1837,7 +1837,7 @@ color: rgb(66, 8, 36);</string>
                         <property name="geometry">
                          <rect>
                           <x>10</x>
-                          <y>20</y>
+                          <y>90</y>
                           <width>221</width>
                           <height>31</height>
                          </rect>
@@ -1848,6 +1848,36 @@ border: 1px solid #000000;
 border-radius: 10px;
 font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QComboBox" name="simulator_comboBox">
+                        <property name="geometry">
+                         <rect>
+                          <x>8</x>
+                          <y>30</y>
+                          <width>231</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="simulator_label_2">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>10</y>
+                          <width>121</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Simulator</string>
                         </property>
                        </widget>
                       </widget>
@@ -1863,10 +1893,10 @@ color: rgb(66, 8, 36);</string>
                        <widget class="QPushButton" name="addJCN_pushButton">
                         <property name="geometry">
                          <rect>
-                          <x>130</x>
-                          <y>170</y>
-                          <width>101</width>
-                          <height>41</height>
+                          <x>40</x>
+                          <y>140</y>
+                          <width>191</width>
+                          <height>71</height>
                          </rect>
                         </property>
                         <property name="styleSheet">

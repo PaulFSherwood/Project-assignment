@@ -169,14 +169,30 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pri_3_count.setText(str(priority_totals[3]))
 
     def set_awaiting_approval(self):
-        query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
+        # query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
+        # result = self.execute_query(query)
+
+        # for i, work_order in enumerate(result):
+        #     label_name = f"set_{i+1}_count"  # Assuming the QLabel attribute names follow the pattern set_1_count, set_2_count, etc.
+        #     label = getattr(self, label_name, None)
+        #     if label is not None:
+        #         label.setText(str(work_order[0]))
+        query = "SELECT creation_reason FROM flight_simulator_db.WorkOrders WHERE signed_off_by IS NULL OR signed_off_by = '' ORDER BY creation_date DESC LIMIT 5"
         result = self.execute_query(query)
 
+        # Update the label with text from result or with an qta icon
         for i, work_order in enumerate(result):
-            label_name = f"set_{i+1}_count"  # Assuming the QLabel attribute names follow the pattern set_1_count, set_2_count, etc.
+            label_name = f"set_{i+1}_count"
             label = getattr(self, label_name, None)
+            # if the label has text
             if label is not None:
+                print(f"Label {label_name} has text")
                 label.setText(str(work_order[0]))
+            elif label is None:
+                label = getattr(self, label_name, None)
+                print(f"Label {label_name} has no text")
+                label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
+
 
     ############################################################################################################
     # LOAD TABLE DATA

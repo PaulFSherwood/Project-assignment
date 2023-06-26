@@ -226,11 +226,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # 5 correction_note
         # 6 simulator
         jcn = self.JCN_lineEdit_2.text()
+        reportedBy = self.reportedBy_lineEdit.text()
         disposition = self.disposition_lineEdit_2.text()
         creation_reason = self.reason_textEdit_2.toPlainText()
-        creation_date = self.dateFound_dateTimeEdit.dateTime().toString("yyyy-MM-dd")
         priority = self.priority_comboBox.currentText()
         correction_note = self.notes_textEdit_2.toPlainText()
+        
+        creation_date = self.dateFound_dateTimeEdit.dateTime().toString("yyyy-MM-dd")
+
         simulator = self.simulator_comboBox.currentText()
         subsystem = self.subsystem_comboBox.currentText()
 
@@ -241,12 +244,32 @@ class MainWindow(QtWidgets.QMainWindow):
         subs_id_query = "SELECT subsystem_id FROM subsystems WHERE name = %s"
         subs_id = self.execute_query(subs_id_query, (subsystem,))[0][0]
 
+        print(f"jcn: {jcn} reportedBy: {reportedBy} disposition: {disposition} creation_reason: {creation_reason} \
+                creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \
+                simulator: {simulator} subsystem: {subsystem}")
         # Insert new JCN
-        insert_query = "INSERT INTO WorkOrders (jcn, disposition, creation_reason, creation_date, priority, correction_note, simulator_id, subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        self.execute_insert_query(insert_query, (jcn, disposition, creation_reason, creation_date, priority, correction_note, sim_id, subs_id))
+        insert_query = "INSERT INTO WorkOrders (jcn, \
+                                                reported_by_name, \
+                                                disposition, \
+                                                creation_reason, \
+                                                creation_date, \
+                                                priority, \
+                                                correction_note, \
+                                                simulator_id, \
+                                                subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        self.execute_insert_query(insert_query, (jcn, 
+                                                 reportedBy, 
+                                                 disposition, 
+                                                 creation_reason, 
+                                                 creation_date, 
+                                                 priority, 
+                                                 correction_note, 
+                                                 sim_id, 
+                                                 subs_id))
 
         # Clear the fields
         self.disposition_lineEdit_2.clear()
+        self.reportedBy_lineEdit.clear()
         self.reason_textEdit_2.clear()
         self.notes_textEdit_2.clear()
         self.priority_comboBox.clear()
