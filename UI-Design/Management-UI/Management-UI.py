@@ -26,7 +26,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ############################################################################################################
         # ICON SETUP
         # Setting up icons for each button (couldn't find another way to show icons but with buttons)
-        self.right_menu_button.setIcon(qta.icon('fa5s.sign-out-alt', color='orange'))
+        self.sign_off_button.setIcon(qta.icon('fa5s.sign-out-alt', color='orange'))
         self.left_menu_button.setIcon(qta.icon('fa5s.sign-in-alt', color='orange', hflip=True))
         self.pushButton_7.setIcon(qta.icon('ri.pie-chart-line', color='orange'))
         self.pushButton_7.setIconSize(QtCore.QSize(32, 32))  # Rezise the icon to 32x32
@@ -48,7 +48,14 @@ class MainWindow(QtWidgets.QMainWindow):
         ############################################################################################################
         # BUTTON CONNECTIONS
         # show and hide the right_menu_widget when menu_button is clicked
-        self.right_menu_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
+        self.sign_off_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
+        # Sign off buttons/lables
+        self.set_1_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_1_count)
+        self.set_2_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_2_count)
+        self.set_3_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_3_count)
+        self.set_4_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_4_count)
+        self.set_5_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_5_count)
+
         self.left_menu_button.clicked.connect(lambda: self.left_menu_widget.setHidden(not self.left_menu_widget.isHidden()))
 
         ### These buttons need to be updated so the can call for data again to refresh the tables.
@@ -69,7 +76,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     ############################################################################################################
     # SQL FUNCTION
-    def execute_query(self, query):
+    def execute_query(self, query, params=None):
         # Connection to the flight sim database
         db = mysql.connector.connect(
             host='localhost',
@@ -80,13 +87,37 @@ class MainWindow(QtWidgets.QMainWindow):
         # Create the cursor for the look in the db
         cursor = db.cursor()
         # Execute the query passed in by the user / function
-        cursor.execute(query)
+        if params is not None:
+            cursor.execute(query, params)
+        else:
+            cursor.execute(query)
         # save the result
         result = cursor.fetchall()
         # close the connection
         cursor.close()
         db.close()
         return result
+    
+    def execute_insert_query(self, query, params=None):
+        db = mysql.connector.connect(
+            host = 'localhost',
+            user = 'sherwood',
+            password = 'sherwood',
+            database = 'flight_simulator_db'
+        )
+        cursor = db.cursor()
+        try:
+            if params is not None:
+                cursor.execute(query, params)
+            else:
+                cursor.execute(query)
+            db.commit()
+        except mysql.connector.Error as err:
+            print("Something went wrong: {}".format(err))
+            db.rollback()
+        finally:
+            cursor.close()
+            db.close()
     
     ############################################################################################################
     # DASHBOARD FUNCTIONS
@@ -149,6 +180,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.setParent(self.dashboard_frame_left)
         self.dashBoardChartView.resize(self.dashboard_frame_left.size())
         self.dashBoardChartView.show()
+
+    def open_sign_off_panel(self, label):
+        if label.text() != "...":
+            # add sign off name to the workorder table
+            name = 2
+            ## this whole thing is kinda of broken 
+            # the name should not be hard coded
+            # the query updates every label instead of just one
+            query = f"UPDATE WorkOrders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
+            self.execute_insert_query(query)
+            self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
     ############################################################################################################
     # TABS

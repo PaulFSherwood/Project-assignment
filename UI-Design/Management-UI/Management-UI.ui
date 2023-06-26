@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>963</width>
+    <width>996</width>
     <height>600</height>
    </rect>
   </property>
@@ -192,7 +192,6 @@ QTableView::item:hover {
            <widget class="QPushButton" name="pushButton_7">
             <property name="font">
              <font>
-              <family>Verdana</family>
               <pointsize>-1</pointsize>
               <bold>true</bold>
              </font>
@@ -415,7 +414,6 @@ QTableView::item:hover {
               <widget class="QLabel" name="title_label">
                <property name="font">
                 <font>
-                 <family>Cambria</family>
                  <pointsize>26</pointsize>
                  <italic>false</italic>
                  <bold>true</bold>
@@ -440,27 +438,7 @@ QTableView::item:hover {
             <property name="frameShadow">
              <enum>QFrame::Raised</enum>
             </property>
-            <layout class="QHBoxLayout" name="horizontalLayout_5">
-             <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-              <widget class="QPushButton" name="right_menu_button">
-               <property name="minimumSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>40</width>
-                 <height>40</height>
-                </size>
-               </property>
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <layout class="QHBoxLayout" name="horizontalLayout_5"/>
            </widget>
           </item>
          </layout>
@@ -532,7 +510,6 @@ QTableView::item:hover {
                    </property>
                    <property name="font">
                     <font>
-                     <family>Candara</family>
                      <pointsize>14</pointsize>
                      <italic>false</italic>
                      <bold>true</bold>
@@ -1230,6 +1207,12 @@ QTableView::item:hover {
              <layout class="QVBoxLayout" name="verticalLayout_17">
               <item>
                <widget class="QFrame" name="chart_top">
+                <property name="minimumSize">
+                 <size>
+                  <width>612</width>
+                  <height>230</height>
+                 </size>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::StyledPanel</enum>
                 </property>
@@ -1256,6 +1239,12 @@ QTableView::item:hover {
               </item>
               <item>
                <widget class="QFrame" name="chart_bottom">
+                <property name="minimumSize">
+                 <size>
+                  <width>612</width>
+                  <height>230</height>
+                 </size>
+                </property>
                 <property name="frameShape">
                  <enum>QFrame::StyledPanel</enum>
                 </property>
@@ -1308,7 +1297,6 @@ QTableView::item:hover {
             </property>
             <property name="font">
              <font>
-              <family>Verdana</family>
               <pointsize>-1</pointsize>
               <bold>true</bold>
              </font>
@@ -1332,15 +1320,62 @@ QTableView::item:hover {
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
-          <item>
-           <widget class="QLabel" name="cool_thing">
-            <property name="text">
-             <string>NEW TEXT</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
+         <widget class="QLabel" name="cool_thing">
+          <property name="geometry">
+           <rect>
+            <x>9</x>
+            <y>9</y>
+            <width>64</width>
+            <height>16</height>
+           </rect>
+          </property>
+          <property name="text">
+           <string>NEW TEXT</string>
+          </property>
+         </widget>
+         <widget class="QPushButton" name="sign_off_button">
+          <property name="geometry">
+           <rect>
+            <x>10</x>
+            <y>450</y>
+            <width>131</width>
+            <height>41</height>
+           </rect>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>5555</width>
+            <height>555</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">#sign_off_button {
+    border-radius: 15px;
+    border: 3px solid rgb(120, 157, 186);
+    text-align: center;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(75,100,130), stop: 1 rgb(61, 80, 95));
+}
+
+#sign_off_button:hover {
+    border-radius: 16px;
+    border: 3px solid rgb(186, 157, 120);
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(95,120,150), stop: 1 rgb(75,100,130));
+}
+
+#sign_off_button:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(61, 80, 95), stop: 1 rgb(45,64,75));
+}</string>
+          </property>
+          <property name="text">
+           <string>Sign Off</string>
+          </property>
+         </widget>
         </widget>
        </item>
       </layout>
