@@ -271,6 +271,7 @@ desktop.ini
 
 # Editors temporary files 
 *~
+*.autosave
 
 # Hide other project folder that are in github
 LOTGD-Clone
