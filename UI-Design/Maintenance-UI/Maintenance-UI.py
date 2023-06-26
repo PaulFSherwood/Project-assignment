@@ -183,8 +183,6 @@ class MainWindow(QtWidgets.QMainWindow):
         # Get the current number of JCNs
         query = f"SELECT COUNT(*) FROM WorkOrders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'" # fstring required for the date
         count = self.execute_query(query)[0][0]
-        query = f"SELECT COUNT(*) FROM WorkOrders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'"
-        print(self.execute_query(query))
         # make the new jcn number
         jcn_number = f"{date}{str(count + 1).zfill(3)}" # zfill is used to pad the number with 0's
         # set the new jcn number
@@ -256,7 +254,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                                 priority, \
                                                 correction_note, \
                                                 simulator_id, \
-                                                subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                                                subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"  # make sure the number of %s matches selections
         self.execute_insert_query(insert_query, (jcn, 
                                                  reportedBy, 
                                                  disposition, 

@@ -50,6 +50,8 @@ class MainWindow(QtWidgets.QMainWindow):
         # show and hide the right_menu_widget when menu_button is clicked
         self.right_menu_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
         self.left_menu_button.clicked.connect(lambda: self.left_menu_widget.setHidden(not self.left_menu_widget.isHidden()))
+
+        ### These buttons need to be updated so the can call for data again to refresh the tables.
         self.dashboard_pushButton.clicked.connect(lambda: self.switch_page(self.dashboard_view, "DASHBOARD"))
         self.cost_pushButton.clicked.connect(lambda: self.switch_page(self.cost_view, "COST"))
         self.work_orders_pushButton.clicked.connect(lambda: self.switch_page(self.work_orders_view, "WORK ORDERS"))

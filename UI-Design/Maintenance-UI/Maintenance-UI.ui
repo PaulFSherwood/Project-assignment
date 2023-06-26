@@ -56,13 +56,13 @@
     background-color: rgb(61, 80, 95);
 }
 
-#left_header_nav QPushButton,#right_header_nav QPushButton, #addJCN_pushButton QPushButton {
+#left_header_nav QPushButton,#right_header_nav QPushButton {
     background-color: rgb(61, 80, 95);
     border-radius: 15px;
     border: 3px solid rgb(120, 157, 186);
 }
 
-#left_nav_section QPushButton, #left_header_nav QPushButton, #right_header_nav QPushButton, #addJCN_pushButton QPushButton {
+#left_nav_section QPushButton, #left_header_nav QPushButton, #right_header_nav QPushButton {
     background-color: rgb(61, 80, 95);
     border-radius: 15px;
     border: 3px solid rgb(120, 157, 186);
@@ -70,7 +70,7 @@
     padding-left: 8px;
 }
 
-#left_nav_section QPushButton:hover, #left_header_nav QPushButton:hover, #right_header_nav QPushButton:hover, #addJCN_pushButton QPushButton:hover {
+#left_nav_section QPushButton:hover, #left_header_nav QPushButton:hover, #right_header_nav QPushButton:hover {
     background-color: rgb(95, 80, 61);
     border-radius: 16px;
     border: 3px solid rgb(186, 157, 120);
@@ -1912,7 +1912,22 @@ color: rgb(66, 8, 36);</string>
                          </size>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true"/>
+                         <string notr="true">#addJCN_pushButton {
+    border-radius: 15px;
+    border: 3px solid rgb(120, 157, 186);
+    text-align: center;
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(75,100,130), stop: 1 rgb(61, 80, 95));
+}
+
+#addJCN_pushButton:hover {
+    border-radius: 16px;
+    border: 3px solid rgb(186, 157, 120);
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(95,120,150), stop: 1 rgb(75,100,130));
+}
+
+#addJCN_pushButton:pressed {
+    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(61, 80, 95), stop: 1 rgb(45,64,75));
+}</string>
                         </property>
                         <property name="text">
                          <string>Add JCN</string>
@@ -1921,6 +1936,9 @@ color: rgb(66, 8, 36);</string>
                       </widget>
                      </item>
                     </layout>
+                    <zorder>frame_25</zorder>
+                    <zorder>frame_23</zorder>
+                    <zorder>frame_24</zorder>
                    </widget>
                   </item>
                  </layout>
