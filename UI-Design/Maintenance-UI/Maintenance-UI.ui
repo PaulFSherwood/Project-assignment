@@ -507,7 +507,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>2</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
