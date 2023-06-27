@@ -38,9 +38,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_orders_pushButton.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
         self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
 
-        self.dashboard_bar_chart()
-        QTimer.singleShot(0, lambda: self.resizeEvent(None)) # force resize on start
-        self.set_awaiting_approval()
+        # QTimer.singleShot(0, lambda: self.resizeEvent(None)) # force resize on start
 
         # set right_menu_widget as hidden when starting the application
         self.right_menu_widget.setHidden(True)
@@ -67,6 +65,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ############################################################################################################
         # TABLE SETUP / TAB SETUP
+        self.dashboard_bar_chart()
+        self.set_awaiting_approval()
         self.load_table_data()
         self.load_work_order_data()
         self.load_inventory_data()
@@ -120,7 +120,7 @@ class MainWindow(QtWidgets.QMainWindow):
             db.close()
     
     ############################################################################################################
-    # DASHBOARD FUNCTIONS
+    # Helper Function
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
@@ -150,13 +150,24 @@ class MainWindow(QtWidgets.QMainWindow):
 
         super().resizeEvent(event)
 
-    ############################################################################################################
-    # Helper Function
+    def open_sign_off_panel(self, label):
+        if label.text() != "...":
+            # add sign off name to the workorder table
+            name = 2
+            ## this whole thing is kinda of broken 
+            # the name should not be hard coded
+            # the query updates every label instead of just one
+            query = f"UPDATE WorkOrders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
+            self.execute_insert_query(query)
+            self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
+
     def create_bar_set(self, label, value):
         barSet = QBarSet(label)
         barSet.append(value)
         return barSet
 
+    ############################################################################################################
+    # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
 
         dashQuery = "CALL GetWorkOrderCountPerDay()"
@@ -181,19 +192,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.resize(self.dashboard_frame_left.size())
         self.dashBoardChartView.show()
 
-    def open_sign_off_panel(self, label):
-        if label.text() != "...":
-            # add sign off name to the workorder table
-            name = 2
-            ## this whole thing is kinda of broken 
-            # the name should not be hard coded
-            # the query updates every label instead of just one
-            query = f"UPDATE WorkOrders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
-            self.execute_insert_query(query)
-            self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
-
-    ############################################################################################################
-    # TABS
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
         result = self.execute_query(query)
@@ -236,7 +234,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 label = getattr(self, label_name, None)
                 print(f"Label {label_name} has no text")
                 label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
-
 
     ############################################################################################################
     # LOAD TABLE DATA
