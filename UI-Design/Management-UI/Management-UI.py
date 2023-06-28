@@ -48,11 +48,11 @@ class MainWindow(QtWidgets.QMainWindow):
         # show and hide the right_menu_widget when menu_button is clicked
         # self.sign_off_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
         # Sign off buttons/lables
-        self.set_1_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_1_count)
-        self.set_2_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_2_count)
-        self.set_3_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_3_count)
-        self.set_4_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_4_count)
-        self.set_5_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_5_count)
+        self.set_1_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_1_count, self.jcn_num_1)
+        self.set_2_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_2_count, self.jcn_num_2)
+        self.set_3_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_3_count, self.jcn_num_3)
+        self.set_4_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_4_count, self.jcn_num_4)
+        self.set_5_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_5_count, self.jcn_num_5)
 
         self.left_menu_button.clicked.connect(lambda: self.left_menu_widget.setHidden(not self.left_menu_widget.isHidden()))
 
@@ -161,14 +161,15 @@ class MainWindow(QtWidgets.QMainWindow):
     #         self.execute_insert_query(query)
     #         self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
-    def open_sign_off_panel(self, label):
+    def open_sign_off_panel(self, label, jcn_num):
         if label.text() != "...":
             self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
             sign_off_id = 2  # Hard-coded for demonstration purposes, replace with appropriate value or logic
-            print(f"Sign off ID: {sign_off_id}, work order ID: {label.text()}")
+            # print(f"Sign off ID: {sign_off_id}, work order ID: {label.text()}, JCN: {jcn_num.text()}")
 
             def execute_and_hide():
-                query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = {label.text()} AND {sign_off_id} IN (SELECT user_id FROM users)"
+                # query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = {label.text()} AND {sign_off_id} IN (SELECT user_id FROM users)"
+                query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = '{label.text()}' AND jcn = '{jcn_num.text()}' AND {sign_off_id} IN (SELECT user_id FROM users)"
                 self.execute_insert_query(query)
                 self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
@@ -231,17 +232,24 @@ class MainWindow(QtWidgets.QMainWindow):
         result = self.execute_query(query)
 
         # Update the label with text from result or with an qta icon
-        for i, work_order, jcn in enumerate(result):
-            label_name = f"set_{i+1}_count"
-            label = getattr(self, label_name, None)
+        for i, set in enumerate(result):
+            work_order = set[0]
+            jcn = set[1]
+            set_0 = f"set_{i+1}_count"
+            set_1 = f"jcn_num_{i+1}"
+            txt_label = getattr(self, set_0, None)
+            jcn_label = getattr(self, set_1, None)
             # if the label has text
-            if label is not None:
-                print(f"Label {label_name} has text")
-                label.setText(str(work_order[0]))
-            elif label is None:
-                label = getattr(self, label_name, None)
-                print(f"Label {label_name} has no text")
-                label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
+            if txt_label is not None:
+                # print(f"Label {reason_label} has text")
+                txt_label.setText(str(work_order))
+                jcn_label.setText(str(jcn))
+                # print(f"Set IF: {i+1}: {work_order}, {jcn}")
+            # elif txt_label is None:
+            #     txt_label = getattr(self, set_0, None)
+            #     # print(f"Label {reason_label} has no text")
+            #     txt_label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
+            #     jcn_label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
 
     ############################################################################################################
     # LOAD TABLE DATA
