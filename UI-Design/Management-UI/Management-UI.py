@@ -46,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ############################################################################################################
         # BUTTON CONNECTIONS
         # show and hide the right_menu_widget when menu_button is clicked
-        self.sign_off_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
+        # self.sign_off_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
         # Sign off buttons/lables
         self.set_1_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_1_count)
         self.set_2_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_2_count)
@@ -150,16 +150,32 @@ class MainWindow(QtWidgets.QMainWindow):
 
         super().resizeEvent(event)
 
+    # def open_sign_off_panel(self, label):
+    #     if label.text() != "...":
+    #         # add sign off name to the workorder table
+    #         name = 2
+    #         ## this whole thing is kinda of broken 
+    #         # the name should not be hard coded
+    #         # the query updates every label instead of just one
+    #         query = f"UPDATE workorders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
+    #         self.execute_insert_query(query)
+    #         self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
+
     def open_sign_off_panel(self, label):
         if label.text() != "...":
-            # add sign off name to the workorder table
-            name = 2
-            ## this whole thing is kinda of broken 
-            # the name should not be hard coded
-            # the query updates every label instead of just one
-            query = f"UPDATE WorkOrders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
-            self.execute_insert_query(query)
             self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
+            sign_off_id = 2  # Hard-coded for demonstration purposes, replace with appropriate value or logic
+            print(f"Sign off ID: {sign_off_id}, work order ID: {label.text()}")
+
+            def execute_and_hide():
+                query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = {label.text()} AND {sign_off_id} IN (SELECT user_id FROM users)"
+                self.execute_insert_query(query)
+                self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
+
+            self.sign_off_button.clicked.connect(execute_and_hide)
+
+
+
 
     def create_bar_set(self, label, value):
         barSet = QBarSet(label)
@@ -193,7 +209,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.show()
 
     def set_priority_counts(self):
-        query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
+        query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
         result = self.execute_query(query)
 
         # Store the counts
@@ -211,19 +227,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pri_3_count.setText(str(priority_totals[3]))
 
     def set_awaiting_approval(self):
-        # query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
-        # result = self.execute_query(query)
-
-        # for i, work_order in enumerate(result):
-        #     label_name = f"set_{i+1}_count"  # Assuming the QLabel attribute names follow the pattern set_1_count, set_2_count, etc.
-        #     label = getattr(self, label_name, None)
-        #     if label is not None:
-        #         label.setText(str(work_order[0]))
-        query = "SELECT creation_reason FROM flight_simulator_db.WorkOrders WHERE signed_off_by IS NULL OR signed_off_by = '' ORDER BY creation_date DESC LIMIT 5"
+        query = "SELECT creation_reason, jcn FROM flight_simulator_db.workorders WHERE signed_off_id IS NULL OR signed_off_id = '' ORDER BY creation_date DESC LIMIT 5"
         result = self.execute_query(query)
 
         # Update the label with text from result or with an qta icon
-        for i, work_order in enumerate(result):
+        for i, work_order, jcn in enumerate(result):
             label_name = f"set_{i+1}_count"
             label = getattr(self, label_name, None)
             # if the label has text
@@ -273,7 +281,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_work_order_data(self):
 
         # Execute the query to fetch the data
-        query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM WorkOrders"
+        query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM workorders"
 
         # Fetch all the rows returned by the query
         work_order_data = self.execute_query(query)

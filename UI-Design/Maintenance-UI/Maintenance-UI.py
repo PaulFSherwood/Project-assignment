@@ -176,7 +176,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.show()
 
     def set_priority_counts(self):
-        query = "SELECT priority, COUNT(*) FROM WorkOrders GROUP BY priority"
+        query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
         result = self.execute_query(query)
 
         # Store the counts
@@ -195,7 +195,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_awaiting_approval(self):
         recentProblemsQuery = "SELECT creation_reason FROM workorders ORDER BY creation_date DESC LIMIT 5;"
-        # query = "SELECT creation_reason FROM WorkOrders ORDER BY creation_date DESC LIMIT 5"
+        # query = "SELECT creation_reason FROM workorders ORDER BY creation_date DESC LIMIT 5"
         # result = self.execute_query(query)
         result = self.execute_query(recentProblemsQuery)
 
@@ -250,17 +250,17 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_work_order_data(self):
         # Execute query to get jcn, simulator name, disposition, creation_reason, creation_date, priority, correction_notes
         query = "SELECT  \
-                WorkOrders.jcn, \
-                WorkOrders.disposition, \
-                WorkOrders.creation_reason, \
-                WorkOrders.creation_date, \
-                WorkOrders.priority, \
-                WorkOrders.correction_note, \
-                Simulators.model\
+                workorders.jcn, \
+                workorders.disposition, \
+                workorders.creation_reason, \
+                workorders.creation_date, \
+                workorders.priority, \
+                workorders.correction_note, \
+                simulators.model\
             FROM \
-                WorkOrders\
+                workorders\
             JOIN \
-                Simulators ON WorkOrders.simulator_id = Simulators.simulator_id"
+                simulators ON workorders.simulator_id = simulators.simulator_id"
 
         # Fetch all the rows returned by the query
         work_order_data = self.execute_query(query)
@@ -436,7 +436,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dateFound_dateTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
         
         # Get the current number of JCNs
-        query = f"SELECT COUNT(*) FROM WorkOrders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'" # fstring required for the date
+        query = f"SELECT COUNT(*) FROM workorders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'" # fstring required for the date
         count = self.execute_query(query)[0][0]
         # make the new jcn number
         jcn_number = f"{date}{str(count + 1).zfill(3)}" # zfill is used to pad the number with 0's
@@ -444,7 +444,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.JCN_lineEdit_2.setText(jcn_number)
 
         # Update the simulator list
-        simulator_list = "SELECT model FROM Simulators"
+        simulator_list = "SELECT model FROM simulators"
         simulator_names = self.execute_query(simulator_list)
         for sims in simulator_names:
             self.simulator_comboBox.addItem(sims[0])
@@ -491,7 +491,7 @@ class MainWindow(QtWidgets.QMainWindow):
         subsystem = self.subsystem_comboBox.currentText()
 
         # Get simulator_id and subsystem_id from the names
-        sim_id_query = "SELECT simulator_id FROM Simulators WHERE model = %s"
+        sim_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
         sim_id = self.execute_query(sim_id_query, (simulator,))[0][0]
 
         subs_id_query = "SELECT subsystem_id FROM subsystems WHERE name = %s"
@@ -501,7 +501,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \
                 simulator: {simulator} subsystem: {subsystem}")
         # Insert new JCN
-        insert_query = "INSERT INTO WorkOrders (jcn, \
+        insert_query = "INSERT INTO workorders (jcn, \
                                                 reported_by_name, \
                                                 disposition, \
                                                 creation_reason, \
