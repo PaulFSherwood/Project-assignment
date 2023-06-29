@@ -34,7 +34,7 @@ def execute_query(query, params=None):
 
 
 # username1, password1 = "Anderson", bcrypt.hashpw("aaaa".encode(), bcrypt.gensalt())
-username2, password2 = "Bailey", bcrypt.hashpw("bbbb".encode('utf-8'), bcrypt.gensalt())
+# username2, password2 = "Bailey", bcrypt.hashpw("bbbb".encode('utf-8'), bcrypt.gensalt())
 # username3, password3 = "Carter", bcrypt.hashpw("cccc".encode(), bcrypt.gensalt())
 # username4, password4 = "Davis", bcrypt.hashpw("dddd".encode(), bcrypt.gensalt())
 # username5, password5 = "Edwards", bcrypt.hashpw("eeee".encode(), bcrypt.gensalt())
@@ -45,7 +45,7 @@ username2, password2 = "Bailey", bcrypt.hashpw("bbbb".encode('utf-8'), bcrypt.ge
 # username10, password10 = "King", bcrypt.hashpw("kkkk".encode(), bcrypt.gensalt())
 
 # print(password1)
-print(password2)
+# print(password2)
 # print(password3)
 # print(password4)
 # print(password5)
@@ -55,7 +55,7 @@ print(password2)
 # print(password9)
 # print(password10)
 
-print(f"Hashed password: {password2}")
+# print(f"Hashed password: {password2}")
 
 # # update all the users passwords in the database
 # for i in range(1, 10):
@@ -68,10 +68,11 @@ print(f"Hashed password: {password2}")
 # get username
 username = input("Enter your username: ")
 # get password and convert
-userPassword = getpass.getpass("Enter your password: ")
+userPassword = getpass.getpass("Enter your password: ").encode("utf-8")
 # Hash the pass
-password_hashed = bcrypt.hashpw(userPassword.encode(), bcrypt.gensalt())
-
+password_hashed = bcrypt.hashpw(userPassword, bcrypt.gensalt())
+print(f"Hashed password: {password_hashed}")
+print(f"User password: {userPassword}")
 # save query to variable
 query = "SELECT * FROM users WHERE username = %s AND password = %s"
 params = (username, password_hashed)
@@ -86,3 +87,5 @@ if len(result) > 0:
         print(i)
 else:
     print("Login failed")
+    print(result)
+
