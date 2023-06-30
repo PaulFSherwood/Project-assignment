@@ -22,70 +22,54 @@ def execute_query(query, params=None):
     # close the connection
     cursor.close()
     db.close()
-    return result
-
-# cur.execute("""
-# CREATE"""
-
-# username1, password1 = "Bailey", hashlib.sha256("1234".encode()).hexdigest()
-
-# print(username1, password1)
+    return result[0]
 
 
+def get_user_password(username):
+    query = "SELECT password FROM users WHERE username = %s"
+    result = execute_query(query, (username,))
+    # cursor.execute(query, (username,))
+    # result = cursor.fetchone()
+    if result:
+        print(f"Result: {result[0]}")
+        return result[0]
+    else:
+        return None
 
-# username1, password1 = "Anderson", bcrypt.hashpw("aaaa".encode(), bcrypt.gensalt())
-# username2, password2 = "Bailey", bcrypt.hashpw("bbbb".encode('utf-8'), bcrypt.gensalt())
-# username3, password3 = "Carter", bcrypt.hashpw("cccc".encode(), bcrypt.gensalt())
-# username4, password4 = "Davis", bcrypt.hashpw("dddd".encode(), bcrypt.gensalt())
-# username5, password5 = "Edwards", bcrypt.hashpw("eeee".encode(), bcrypt.gensalt())
-# username6, password6 = "Foster", bcrypt.hashpw("ffff".encode(), bcrypt.gensalt())
-# username7, password7 = "Gray", bcrypt.hashpw("gggg".encode(), bcrypt.gensalt())
-# username8, password8 = "Hughes", bcrypt.hashpw("hhhh".encode(), bcrypt.gensalt())
-# username9, password9 = "Jenkins", bcrypt.hashpw("jjjj".encode(), bcrypt.gensalt())
-# username10, password10 = "King", bcrypt.hashpw("kkkk".encode(), bcrypt.gensalt())
+def verify_password(username):
+    stored_password = get_user_password(username).encode("utf-8")  # string must be in byte format
+    print(f"Stored password: {stored_password}")
+    if stored_password:
+        entered_password = getpass.getpass("Enter your password: ").encode("utf-8")  # string must be in byte format
+        
+        return bcrypt.checkpw(entered_password, stored_password), stored_password
+    else:
+        return False
+    
+username = input("Enter a username: ")
+hash_pw = verify_password(username)[1]
 
-# print(password1)
-# print(password2)
-# print(password3)
-# print(password4)
-# print(password5)
-# print(password6)
-# print(password7)
-# print(password8)
-# print(password9)
-# print(password10)
+print(f"User: {username}")
+print(f"Hashed password: {hash_pw}")
 
-# print(f"Hashed password: {password2}")
+# create a new connection to the database using the username and password
+db = mysql.connector.connect(
+    host='localhost',
+    user=username,
+    password=hash_pw.decode("utf-8"),
+    database='flight_simulator_db'
+)
+# create a cursor to execute queries
+cursor = db.cursor()
 
-# # update all the users passwords in the database
-# for i in range(1, 10):
-#     execute_query("""
-#     UPDATE users
-#     SET password = ?
-#     WHERE username = ?
-#     """, (locals()[f"password{i}"], locals()[f"username{i}"]))
+# query: SELECT model FROM flight_simulator_db.simulators;
 
-# get username
-username = input("Enter your username: ")
-# get password and convert
-userPassword = getpass.getpass("Enter your password: ").encode("utf-8")
-# Hash the pass
-password_hashed = bcrypt.hashpw(userPassword, bcrypt.gensalt())
-print(f"Hashed password: {password_hashed}")
-print(f"User password: {userPassword}")
-# save query to variable
-query = "SELECT * FROM users WHERE username = %s AND password = %s"
-params = (username, password_hashed)
-
-# try query and save the result
-result = execute_query(query, params)
-
-# test if the login works
-if len(result) > 0:
-    print("Login successful")
-    for i in result:
-        print(i)
-else:
-    print("Login failed")
-    print(result)
-
+# execute the query
+cursor.execute("SELECT model FROM flight_simulator_db.simulators;")
+# save the result
+result = cursor.fetchall()
+# print the result
+print(result)
+# close the connection
+cursor.close()
+db.close()

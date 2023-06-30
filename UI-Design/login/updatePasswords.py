@@ -49,7 +49,7 @@ def verify_password(username):
         return False
 
 
-
+# Fix passwords
 # update_password("Anderson", "aaaa")
 # update_password("Bailey", "bbbb")
 # update_password("Carter", "cccc")
