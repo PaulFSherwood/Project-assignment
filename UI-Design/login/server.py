@@ -3,6 +3,7 @@ import bcrypt
 import socket
 import threading
 import json
+import datetime
 from cryptography.fernet import Fernet
 
 # Pull in the encrypted file containing the database credentials
@@ -68,6 +69,17 @@ def handle_connection(client_socket):
     # Now we use bcrypt to compare the plain password with the hashed version stored in the database
     if stored_hashed_password and bcrypt.checkpw(password.encode(), stored_hashed_password.encode()):
         client_socket.send("Login successful".encode())
+        # create a session token for the client based on the username and the date
+        token = bcrypt.hashpw((username + str(datetime.datetime.now())).encode(), bcrypt.gensalt())
+        # store the session token in the database for the user
+        cursor.execute("UPDATE users SET token = %s WHERE username = %s", (token, username))
+        db.commit()
+        # send the token to the client
+        client_socket.send(token)
+        print("Token sent to client")
+
+
+
         # Start a thread to handle client queries
         threading.Thread(target=client_queries, args=(client_socket,)).start()
     else:

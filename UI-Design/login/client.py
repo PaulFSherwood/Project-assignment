@@ -9,9 +9,17 @@ with open('encryption.key', 'rb') as eFile:
 # Create cipher
 fernet = Fernet(encryption_key)
 
-# Default server connect stuff
-client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client.connect(('localhost', 9999))
+# Default server connect stuff - Check if the connection was successful
+try:
+    client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    client.connect(('localhost', 9999))
+except ConnectionRefusedError:
+    print("Can not maintain or find a connection to the server. \n \
+          Please try again later.\n")
+    exit()
+
+# client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# client.connect(('localhost', 9999))
 
 # Wait for the server to request the username
 # Get the username from the user
@@ -42,4 +50,5 @@ if response == "Login successful":
     response = client.recv(1024).decode("utf-8")
     print(f"Response: {response}")
 
+client.send("exit".encode("utf-8"))
 client.close()
