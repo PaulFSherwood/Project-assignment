@@ -2,7 +2,8 @@
 SDEV-Project
 # Project Assignment - Management UI
 
-This project contains a management user interface (UI) for an application. The main program, `show-hide.py`, is located in the following folder:
+This project contains a management user interface (UI) for an application. The main program, `login.py`, is located in the following folder:
+`Project-assignment/UI-Design/combined/`
 
 
 ## TODO
@@ -10,12 +11,14 @@ This project contains a management user interface (UI) for an application. The m
 The following tasks are yet to be completed for the project:
 
 1. Complete chart integration.
-  1a. Management charts are working but resize is not correct.
-2. Tie login functionality to the main application.
-3. Implement a function to allow users to add parts.
-4. Develop functions for users to add work orders.
-5. Create functions for users to sign off on work orders.
-6. DB login and access need to remove hardcoded passwords and update passwords
+  1a. Complete logistic charts
+  1b. Check all charts for appropriate data
+  1c. Fix the sign-off bug that doesn't resize the chart after it is hidden.
+3. Allow users to change the work order state to ready for close
+4. Implement a function to allow users to add parts to the work order.
+5. Update login UI to look better.
+6. Update all UI's if they do not look right.
+7. Look into adding schedule UI and tasks
 
 ## Application Preview
 
