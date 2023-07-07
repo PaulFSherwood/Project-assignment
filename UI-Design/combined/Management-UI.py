@@ -9,19 +9,12 @@ from PyQt6.QtGui import QPainter
 
 import qtawesome as qta
 
+from database_utilites import execute_query, execute_insert_query
 
 class MainWindow(QtWidgets.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
         uic.loadUi('Management-UI.ui', self)
-
-        # Connect to the MySQL database
-        self.db = mysql.connector.connect(
-            host='localhost',
-            user='sherwood',
-            password='sherwood',
-            database='flight_simulator_db'
-        )
 
         ############################################################################################################
         # ICON SETUP
@@ -38,16 +31,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_orders_pushButton.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
         self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
 
-        # QTimer.singleShot(0, lambda: self.resizeEvent(None)) # force resize on start
-
         # set right_menu_widget as hidden when starting the application
         self.right_menu_widget.setHidden(True)
 
         ############################################################################################################
         # BUTTON CONNECTIONS
-        # show and hide the right_menu_widget when menu_button is clicked
-        # self.sign_off_button.clicked.connect(lambda: self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden()))
-        # Sign off buttons/lables
         self.set_1_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_1_count, self.jcn_num_1)
         self.set_2_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_2_count, self.jcn_num_2)
         self.set_3_count.mousePressEvent = lambda event: self.open_sign_off_panel(self.set_3_count, self.jcn_num_3)
@@ -73,51 +61,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load_charts_data()
 
         self.set_priority_counts()
-
-    ############################################################################################################
-    # SQL FUNCTION
-    def execute_query(self, query, params=None):
-        # Connection to the flight sim database
-        db = mysql.connector.connect(
-            host='localhost',
-            user='sherwood',
-            password='sherwood',
-            database='flight_simulator_db'
-        )
-        # Create the cursor for the look in the db
-        cursor = db.cursor()
-        # Execute the query passed in by the user / function
-        if params is not None:
-            cursor.execute(query, params)
-        else:
-            cursor.execute(query)
-        # save the result
-        result = cursor.fetchall()
-        # close the connection
-        cursor.close()
-        db.close()
-        return result
-    
-    def execute_insert_query(self, query, params=None):
-        db = mysql.connector.connect(
-            host = 'localhost',
-            user = 'sherwood',
-            password = 'sherwood',
-            database = 'flight_simulator_db'
-        )
-        cursor = db.cursor()
-        try:
-            if params is not None:
-                cursor.execute(query, params)
-            else:
-                cursor.execute(query)
-            db.commit()
-        except mysql.connector.Error as err:
-            print("Something went wrong: {}".format(err))
-            db.rollback()
-        finally:
-            cursor.close()
-            db.close()
     
     ############################################################################################################
     # Helper Function
@@ -126,57 +69,33 @@ class MainWindow(QtWidgets.QMainWindow):
         self.title_label.setText(title)
 
     def resizeEvent(self, event):
-        # print("frame_16 size:", self.size())  # Print the size of frame_16
-        # self.canvas.setGeometry(self.dashboard_frame_left.rect())
         if event:
             event.accept()
         if hasattr(self, 'dashBoardChartView'):
             self.dashBoardChartView.resize(self.dashboard_frame_left.size())
             self.dashBoardChartView.show()
-            # print("Chart dashBoard Size Hint:", self.dashBoardChartView.sizeHint())
-            # print("Chart dashBoard Minimum Size:", self.dashBoardChartView.minimumSize())
-
+            
         if hasattr(self, 'topChartview'):
             self.topChartview.resize(self.chart_top.size())
             self.topChartview.show()
-            # print("Chart topChartview Size Hint:", self.topChartview.sizeHint())
-            # print("Chart topChartview Minimum Size:", self.topChartview.minimumSize())
-
+            
         if hasattr(self, 'bottomChartview'):
             self.bottomChartview.resize(self.chart_bottom.size())
             self.bottomChartview.show()
-            # print("Chart bottomChartview Size Hint:", self.bottomChartview.sizeHint())
-            # print("Chart bottomChartview Minimum Size:", self.bottomChartview.minimumSize())
-
+            
         super().resizeEvent(event)
-
-    # def open_sign_off_panel(self, label):
-    #     if label.text() != "...":
-    #         # add sign off name to the workorder table
-    #         name = 2
-    #         ## this whole thing is kinda of broken 
-    #         # the name should not be hard coded
-    #         # the query updates every label instead of just one
-    #         query = f"UPDATE workorders SET sign_off_name = '{name}' WHERE work_order_id = {label.text()}"
-    #         self.execute_insert_query(query)
-    #         self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
     def open_sign_off_panel(self, label, jcn_num):
         if label.text() != "...":
             self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
             sign_off_id = 2  # Hard-coded for demonstration purposes, replace with appropriate value or logic
-            # print(f"Sign off ID: {sign_off_id}, work order ID: {label.text()}, JCN: {jcn_num.text()}")
-
+            
             def execute_and_hide():
-                # query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = {label.text()} AND {sign_off_id} IN (SELECT user_id FROM users)"
                 query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = '{label.text()}' AND jcn = '{jcn_num.text()}' AND {sign_off_id} IN (SELECT user_id FROM users)"
-                self.execute_insert_query(query)
+                execute_insert_query(query)
                 self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
             self.sign_off_button.clicked.connect(execute_and_hide)
-
-
-
 
     def create_bar_set(self, label, value):
         barSet = QBarSet(label)
@@ -188,7 +107,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def dashboard_bar_chart(self):
 
         dashQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day = self.execute_query(dashQuery)
+        work_order_count_per_day = execute_query(dashQuery)
 
         dashBoardBarSeries = QBarSeries(self)
 
@@ -211,7 +130,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
-        result = self.execute_query(query)
+        result = execute_query(query)
 
         # Store the counts
         priority_totals = {}
@@ -220,16 +139,13 @@ class MainWindow(QtWidgets.QMainWindow):
             count = priority_count[1]
             priority_totals[priority] = count
 
-        # set pri_1_count
         self.pri_1_count.setText(str(priority_totals[1]))
-        # set pri_2_count
         self.pri_2_count.setText(str(priority_totals[2]))
-        # set pri_3_count
         self.pri_3_count.setText(str(priority_totals[3]))
 
     def set_awaiting_approval(self):
         query = "SELECT creation_reason, jcn FROM flight_simulator_db.workorders WHERE signed_off_id IS NULL OR signed_off_id = '' ORDER BY creation_date DESC LIMIT 5"
-        result = self.execute_query(query)
+        result = execute_query(query)
 
         # Update the label with text from result or with an qta icon
         for i, set in enumerate(result):
@@ -239,25 +155,17 @@ class MainWindow(QtWidgets.QMainWindow):
             set_1 = f"jcn_num_{i+1}"
             txt_label = getattr(self, set_0, None)
             jcn_label = getattr(self, set_1, None)
-            # if the label has text
             if txt_label is not None:
-                # print(f"Label {reason_label} has text")
                 txt_label.setText(str(work_order))
                 jcn_label.setText(str(jcn))
-                # print(f"Set IF: {i+1}: {work_order}, {jcn}")
-            # elif txt_label is None:
-            #     txt_label = getattr(self, set_0, None)
-            #     # print(f"Label {reason_label} has no text")
-            #     txt_label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
-            #     jcn_label.setIcon(qta.icon('mdi6.format-list-check', color='green', scale_factor=1.5))
-
+           
     ############################################################################################################
     # LOAD TABLE DATA
     def load_table_data(self):
         #########################
         ## UPPER TABLE
         query = "CALL GetTechSummary()"
-        tech_cost_data = self.execute_query(query)
+        tech_cost_data = execute_query(query)
 
         # print(tech_cost_data)
 
@@ -274,7 +182,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #########################
         ## LOWER TABLE
-        parts_data = self.execute_query("CALL show_parts_data()")
+        parts_data = execute_query("CALL show_parts_data()")
         # set the number of rows
         self.cost_lower_table.setRowCount(len(parts_data))
         # hide row numbers
@@ -287,12 +195,11 @@ class MainWindow(QtWidgets.QMainWindow):
             self.cost_lower_table.setItem(i, 3, QtWidgets.QTableWidgetItem(str(record[3])))  # priority
 
     def load_work_order_data(self):
-
         # Execute the query to fetch the data
         query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM workorders"
 
         # Fetch all the rows returned by the query
-        work_order_data = self.execute_query(query)
+        work_order_data = execute_query(query)
 
         # set the number of rows
         self.work_order_table.setRowCount(len(work_order_data))
@@ -339,7 +246,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_inventory_data(self):
         # Execute the query to fetch the data
         query = "CALL GetInventoryData()"
-        inventory_data = self.execute_query(query)
+        inventory_data = execute_query(query)
 
         # set the number of rows
         self.inventory_table.setRowCount(len(inventory_data))
@@ -373,7 +280,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_charts_data(self):
         # Call DB stored procedure GetWorkOrderCountPerDay() to get the last 7 days of data
         topQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day_data = self.execute_query(topQuery)
+        work_order_count_per_day_data = execute_query(topQuery)
 
         # Send data to the QLineSeries chart
         topSeries = QLineSeries(self)
@@ -396,7 +303,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ## Bottom chart
         bottomQuery = "CALL GetHoursWorkedPerPerson()"
-        hours_worked_per_person_data = self.execute_query(bottomQuery)
+        hours_worked_per_person_data = execute_query(bottomQuery)
 
 
         bottomSeries = QPieSeries()
