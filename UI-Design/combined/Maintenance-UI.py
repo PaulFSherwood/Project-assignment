@@ -406,7 +406,7 @@ class MainWindow(QtWidgets.QMainWindow):
                                                 correction_note, \
                                                 simulator_id, \
                                                 subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"  # make sure the number of %s matches selections
-        self.execute_insert_query(insert_query, (jcn, 
+        execute_insert_query(insert_query, (jcn, 
                                                  reportedBy, 
                                                  disposition, 
                                                  creation_reason, 

@@ -42,12 +42,12 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashboard_pushButton.clicked.connect(lambda: self.switch_page(self.dashboard_view, "DASHBOARD"))
         self.inventory_pushButton.clicked.connect(lambda: self.switch_page(self.inventory_view, "INVENTORY"))
         self.charts_pushButton.clicked.connect(lambda: self.switch_page(self.charts_view, "CHARTS"))
-        self.addPart_pushButton.clicked.connect(self.update_new_jcn_fields)
+        self.addPart_pushButton.clicked.connect(self.update_new_part_fields)
 
         ############################################################################################################
         # USER ACTION UPDATES
         self.inventory_table.cellClicked.connect(self.update_line_edits)  
-        self.addJCN_pushButton.clicked.connect(self.add_new_jcn)      
+        self.addPart_pushButton_2.clicked.connect(self.add_new_part)      
 
         ############################################################################################################
         # TABLE SETUP / TAB SETUP
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
     ############################################################################################################
     # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
-        dashQuery = "CALL GetWorkOrderCountPerDay()"
+        dashQuery = "CALL show_parts_data()"
         work_order_count_per_day = execute_query(dashQuery)
 
         dashBoardBarSeries = QBarSeries(self)
@@ -107,7 +107,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.show()
 
     def set_priority_counts(self):
-        query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
+        query = "SELECT priority, COUNT(*) FROM logistics GROUP BY priority"
         result = execute_query(query)
 
         # Store the counts
@@ -122,7 +122,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pri_3_count.setText(str(priority_totals[3]))
 
     def set_newest_jcns(self):
-        recentProblemsQuery = "SELECT creation_reason FROM workorders ORDER BY creation_date DESC LIMIT 5;"
+        recentProblemsQuery = "SELECT item_name FROM logistics ORDER BY due_date DESC LIMIT 5;"
         result = execute_query(recentProblemsQuery)
 
         for i, work_order in enumerate(result):
@@ -130,7 +130,6 @@ class MainWindow(QtWidgets.QMainWindow):
             label = getattr(self, label_name, None)
             if label is not None:
                 label.setText(str(work_order[0]))
-
 
     ##############################################################################################################
     # INVENTORY SECTION
@@ -239,7 +238,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.notes_textEdit.setText(notes.text())
         self.enterer_lineEdit.setText(enterer.text())
 
-
     #############################################################################################################
     # LOAD CHARTS DATA SECTION 
     def load_charts_data(self):
@@ -291,31 +289,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
     ############################################################################################################
     ## NEW JCN's SECTION
-    def update_new_jcn_fields(self):
+    def update_new_part_fields(self):
         # change the page
-        self.switch_page(self.newJCN_view, "NEW JCN")
-        # Get todays date
-        today = datetime.date.today()
-        date = today.strftime("%Y%m%d")
-        # set the date time of 'dateFound_dateTimeEdit' to the current date and time
-        self.dateFound_dateTimeEdit.setDateTime(QtCore.QDateTime.currentDateTime())
-        
-        # Get the current number of JCNs
-        query = f"SELECT COUNT(*) FROM workorders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'" # fstring required for the date
-        count = execute_query(query)[0][0]
-        # make the new jcn number
-        jcn_number = f"{date}{str(count + 1).zfill(3)}" # zfill is used to pad the number with 0's
-        # set the new jcn number
-        self.JCN_lineEdit_2.setText(jcn_number)
-
-        # Update the simulator list
-        simulator_list = "SELECT model FROM simulators"
-        simulator_names = execute_query(simulator_list)
-        for sims in simulator_names:
-            self.simulator_comboBox.addItem(sims[0])
-
-        # Default disposition to "AWM" awaiting maintenance 'disposition_lineEdit_2'
-        self.disposition_lineEdit_2.setText("AWM")
+        self.switch_page(self.addPart_view, "NEW PART")
 
         # Update priority_comboBox drop down to show 1, 2, and 3 priority levels
         self.priority_comboBox.addItem("1")
@@ -324,75 +300,72 @@ class MainWindow(QtWidgets.QMainWindow):
         # Set default priority to 3
         self.priority_comboBox.setCurrentIndex(2)
 
-        # Update the subsystem list
-        subsystem_list = "SELECT name FROM subsystems"
-        subsystem_names = execute_query(subsystem_list)
-        for subs in subsystem_names:
-            self.subsystem_comboBox.addItem(subs[0])
+        # Update locationType_comboBox with enums from location_type in the logistics table
+        # location_types_list = "SELECT location_type FROM logistics"
+        location_types_list = "SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_NAME = 'logistics' AND COLUMN_NAME = 'location_type'"
+        location_names = execute_query(location_types_list)
+        enum_values = location_names[0][0].decode().split("'")[1::2]
+        print(f"enum_values: {enum_values}")
+
+        for name in enum_values:
+            self.locationType_comboBox.addItem(name)
+
 
         # Center disposition and priority text
-        self.disposition_lineEdit_2.setAlignment(Qt.AlignCenter)
+        # self.disposition_lineEdit_2.setAlignment(Qt.AlignCenter)
         self.priority_comboBox.setEditable(True)
         self.priority_comboBox.lineEdit().setAlignment(Qt.AlignCenter)
 
-    def add_new_jcn(self):
-         # 0 jcn
-        # 1 disposition
-        # 2 creation_reason
-        # 3 creation_date
-        # 4 priority
-        # 5 correction_note
-        # 6 simulator
-        jcn = self.JCN_lineEdit_2.text()
-        reportedBy = self.reportedBy_lineEdit.text()
-        disposition = self.disposition_lineEdit_2.text()
-        creation_reason = self.reason_textEdit_2.toPlainText()
+    def add_new_part(self):
+        item_name = self.item_name_lineEdit.text()
+        min_stock_num = self.min_stock_num_lineEdit.text()
+        location = self.location_lineEdit_2.text()
+        itemCost = self.itemCost_lineEdit.text()
+
+        # get the username of the person who is logged in
+        reportedBy = '3' #self.username
+        uniqueIdent = self.uniqueIdent_lineEdit.text()
+        notes = self.notes_textEdit_2.toPlainText()
+        repairCost = self.repairCost_lineEdit.text()
+        vendor = self.vendor_lineEdit_2.text()
+        origPN = self.origPN_lineEdit.text()
+        serialNumber = self.serialNumber_lineEdit.text()
+        nsn = self.nsn_lineEdit.text()
+        locationType = self.locationType_comboBox.currentText()
+
         priority = self.priority_comboBox.currentText()
-        correction_note = self.notes_textEdit_2.toPlainText()
+        stock_on_hand = self.stock_on_hand_lineEdit_2.text()
+
+        reason = self.reason_textEdit_2.toPlainText()  # this wont be used for now.
+
+        # Insert new record into the table
+        insert_query = "INSERT INTO logistics (item_name, minimum_stock_number, stock_location, cost_per_item, \
+            entered_by, unique_identifier, notes, repair_cost, vendor, original_part_number, serial_number, national_stock_number, location_type, \
+            priority, stock_on_hand) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
         
-        creation_date = self.dateFound_dateTimeEdit.dateTime().toString("yyyy-MM-dd")
-
-        simulator = self.simulator_comboBox.currentText()
-        subsystem = self.subsystem_comboBox.currentText()
-
-        # Get simulator_id and subsystem_id from the names
-        sim_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
-        sim_id = execute_query(sim_id_query, (simulator,))[0][0]
-
-        subs_id_query = "SELECT subsystem_id FROM subsystems WHERE name = %s"
-        subs_id = execute_query(subs_id_query, (subsystem,))[0][0]
-
-        print(f"jcn: {jcn} reportedBy: {reportedBy} disposition: {disposition} creation_reason: {creation_reason} \
-                creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \
-                simulator: {simulator} subsystem: {subsystem}")
-        # Insert new JCN
-        insert_query = "INSERT INTO workorders (jcn, \
-                                                reported_by_name, \
-                                                disposition, \
-                                                creation_reason, \
-                                                creation_date, \
-                                                priority, \
-                                                correction_note, \
-                                                simulator_id, \
-                                                subsystem_id) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"  # make sure the number of %s matches selections
-        self.execute_insert_query(insert_query, (jcn, 
-                                                 reportedBy, 
-                                                 disposition, 
-                                                 creation_reason, 
-                                                 creation_date, 
-                                                 priority, 
-                                                 correction_note, 
-                                                 sim_id, 
-                                                 subs_id))
+        execute_insert_query(insert_query, (item_name, min_stock_num, location, itemCost, \
+                                                 reportedBy, uniqueIdent, notes, repairCost, vendor, origPN, serialNumber, nsn, locationType, \
+                                                 priority, stock_on_hand))        
 
         # Clear the fields
-        self.disposition_lineEdit_2.clear()
-        self.reportedBy_lineEdit.clear()
-        self.reason_textEdit_2.clear()
+        self.item_name_lineEdit.clear()
+        self.min_stock_num_lineEdit.clear()
+        self.location_lineEdit_2.clear()
+        self.itemCost_lineEdit.clear()
+        self.uniqueIdent_lineEdit.clear()
         self.notes_textEdit_2.clear()
+        self.repairCost_lineEdit.clear()
+        self.vendor_lineEdit_2.clear()
+        self.origPN_lineEdit.clear()
+        self.serialNumber_lineEdit.clear()
+        self.nsn_lineEdit.clear()
+        # self.locationType_lineEdit.clear()
         self.priority_comboBox.clear()
+        self.stock_on_hand_lineEdit_2.clear()
+        self.reason_textEdit_2.clear()
+
         # update jcn number
-        self.update_new_jcn_fields()
+        self.update_new_part_fields()
         
 
 if __name__ == "__main__":

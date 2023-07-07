@@ -490,7 +490,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>1</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -506,7 +506,7 @@ QTableView::item:hover {
                  <item alignment="Qt::AlignLeft|Qt::AlignVCenter">
                   <widget class="QLabel" name="label_2">
                    <property name="text">
-                    <string>Hours Worked</string>
+                    <string>Parts Costs</string>
                    </property>
                   </widget>
                  </item>
@@ -543,7 +543,7 @@ QTableView::item:hover {
                  <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
                   <widget class="QLabel" name="label">
                    <property name="text">
-                    <string>Newest JCN's</string>
+                    <string>Parts Due Recently</string>
                    </property>
                   </widget>
                  </item>
@@ -1610,7 +1610,7 @@ border-radius: 10px;</string>
                        <property name="frameShadow">
                         <enum>QFrame::Raised</enum>
                        </property>
-                       <widget class="QLineEdit" name="disposition_lineEdit_2">
+                       <widget class="QLineEdit" name="location_lineEdit_2">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
@@ -1627,7 +1627,7 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                         </property>
                        </widget>
-                       <widget class="QLabel" name="disposition_label_2">
+                       <widget class="QLabel" name="location_label_2">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
@@ -1637,10 +1637,10 @@ color: rgb(66, 8, 36);</string>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>Disposition</string>
+                         <string>Location</string>
                         </property>
                        </widget>
-                       <widget class="QLabel" name="JCN_label_2">
+                       <widget class="QLabel" name="item_name_label">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
@@ -1650,10 +1650,10 @@ color: rgb(66, 8, 36);</string>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>JCN</string>
+                         <string>Item Name</string>
                         </property>
                        </widget>
-                       <widget class="QLineEdit" name="JCN_lineEdit_2">
+                       <widget class="QLineEdit" name="item_name_lineEdit">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
@@ -1700,12 +1700,12 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                         </property>
                        </widget>
-                       <widget class="QLineEdit" name="reportedBy_lineEdit">
+                       <widget class="QLineEdit" name="min_stock_num_lineEdit">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
                           <y>80</y>
-                          <width>231</width>
+                          <width>111</width>
                           <height>31</height>
                          </rect>
                         </property>
@@ -1717,17 +1717,47 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                         </property>
                        </widget>
-                       <widget class="QLabel" name="reportedBy_label">
+                       <widget class="QLabel" name="min_stock_num_label">
                         <property name="geometry">
                          <rect>
                           <x>0</x>
                           <y>60</y>
-                          <width>101</width>
+                          <width>111</width>
                           <height>20</height>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>Reported By</string>
+                         <string>Min Stock Number</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="stock_on_hand_label_2">
+                        <property name="geometry">
+                         <rect>
+                          <x>120</x>
+                          <y>60</y>
+                          <width>111</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Number Entered</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="stock_on_hand_lineEdit_2">
+                        <property name="geometry">
+                         <rect>
+                          <x>120</x>
+                          <y>80</y>
+                          <width>111</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
                         </property>
                        </widget>
                       </widget>
@@ -1847,26 +1877,176 @@ color: rgb(66, 8, 36);</string>
                        <property name="frameShadow">
                         <enum>QFrame::Raised</enum>
                        </property>
-                       <widget class="QLabel" name="dateFound_label">
+                       <widget class="QLabel" name="itemCost_label">
                         <property name="geometry">
                          <rect>
                           <x>10</x>
-                          <y>0</y>
-                          <width>121</width>
+                          <y>10</y>
+                          <width>81</width>
                           <height>20</height>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>Date Found</string>
+                         <string>Item Cost</string>
                         </property>
                        </widget>
-                       <widget class="QDateTimeEdit" name="dateFound_dateTimeEdit">
+                       <widget class="QLineEdit" name="itemCost_lineEdit">
                         <property name="geometry">
                          <rect>
                           <x>10</x>
-                          <y>20</y>
-                          <width>194</width>
-                          <height>22</height>
+                          <y>30</y>
+                          <width>91</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="repairCost_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>10</y>
+                          <width>81</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Repair Cost</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="repairCost_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>30</y>
+                          <width>91</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="serialNumber_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>100</y>
+                          <width>91</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="serialNumber_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>80</y>
+                          <width>81</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Serial Num.</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="uniqueIdent_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>100</y>
+                          <width>91</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="uniqueIdent_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>80</y>
+                          <width>81</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Unique Ident</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="origPN_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>150</y>
+                          <width>81</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>Orig. P/N</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="origPN_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>170</y>
+                          <width>91</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QLabel" name="nsn_label">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>150</y>
+                          <width>81</width>
+                          <height>20</height>
+                         </rect>
+                        </property>
+                        <property name="text">
+                         <string>NSN</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="nsn_lineEdit">
+                        <property name="geometry">
+                         <rect>
+                          <x>140</x>
+                          <y>170</y>
+                          <width>91</width>
+                          <height>31</height>
                          </rect>
                         </property>
                         <property name="styleSheet">
@@ -1887,54 +2067,20 @@ color: rgb(66, 8, 36);</string>
                        <property name="frameShadow">
                         <enum>QFrame::Raised</enum>
                        </property>
-                       <widget class="QLabel" name="subsystem_label">
+                       <widget class="QLabel" name="locationType_label">
                         <property name="geometry">
                          <rect>
                           <x>10</x>
-                          <y>70</y>
+                          <y>80</y>
                           <width>81</width>
                           <height>20</height>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>Sub System</string>
+                         <string>Location Type</string>
                         </property>
                        </widget>
-                       <widget class="QComboBox" name="subsystem_comboBox">
-                        <property name="geometry">
-                         <rect>
-                          <x>10</x>
-                          <y>90</y>
-                          <width>221</width>
-                          <height>31</height>
-                         </rect>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(148, 177, 255);
-border: 1px solid #000000;
-border-radius: 10px;
-font: 12pt &quot;Verdana&quot;;
-color: rgb(66, 8, 36);</string>
-                        </property>
-                       </widget>
-                       <widget class="QComboBox" name="simulator_comboBox">
-                        <property name="geometry">
-                         <rect>
-                          <x>8</x>
-                          <y>30</y>
-                          <width>221</width>
-                          <height>31</height>
-                         </rect>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">background-color: rgb(148, 177, 255);
-border: 1px solid #000000;
-border-radius: 10px;
-font: 12pt &quot;Verdana&quot;;
-color: rgb(66, 8, 36);</string>
-                        </property>
-                       </widget>
-                       <widget class="QLabel" name="simulator_label_2">
+                       <widget class="QLabel" name="vendor_label_2">
                         <property name="geometry">
                          <rect>
                           <x>10</x>
@@ -1944,7 +2090,41 @@ color: rgb(66, 8, 36);</string>
                          </rect>
                         </property>
                         <property name="text">
-                         <string>Simulator</string>
+                         <string>Vendor</string>
+                        </property>
+                       </widget>
+                       <widget class="QLineEdit" name="vendor_lineEdit_2">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>30</y>
+                          <width>211</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                        </property>
+                       </widget>
+                       <widget class="QComboBox" name="locationType_comboBox">
+                        <property name="geometry">
+                         <rect>
+                          <x>10</x>
+                          <y>100</y>
+                          <width>211</width>
+                          <height>31</height>
+                         </rect>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
                         </property>
                        </widget>
                       </widget>
@@ -1957,7 +2137,7 @@ color: rgb(66, 8, 36);</string>
                        <property name="frameShadow">
                         <enum>QFrame::Raised</enum>
                        </property>
-                       <widget class="QPushButton" name="addJCN_pushButton">
+                       <widget class="QPushButton" name="addPart_pushButton_2">
                         <property name="geometry">
                          <rect>
                           <x>70</x>
@@ -1979,25 +2159,25 @@ color: rgb(66, 8, 36);</string>
                          </size>
                         </property>
                         <property name="styleSheet">
-                         <string notr="true">#addJCN_pushButton {
+                         <string notr="true">#addPart_pushButton_2 {
     border-radius: 15px;
     border: 3px solid rgb(120, 157, 186);
     text-align: center;
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(75,100,130), stop: 1 rgb(61, 80, 95));
 }
 
-#addJCN_pushButton:hover {
+#addPart_pushButton_2:hover {
     border-radius: 16px;
     border: 3px solid rgb(186, 157, 120);
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(95,120,150), stop: 1 rgb(75,100,130));
 }
 
-#addJCN_pushButton:pressed {
+#addPart_pushButton_2:pressed {
     background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 rgb(61, 80, 95), stop: 1 rgb(45,64,75));
 }</string>
                         </property>
                         <property name="text">
-                         <string>Add JCN</string>
+                         <string>Add Part</string>
                         </property>
                        </widget>
                       </widget>
