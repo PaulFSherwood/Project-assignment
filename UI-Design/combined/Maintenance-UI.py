@@ -56,7 +56,7 @@ class MainWindow(QtWidgets.QMainWindow):
         ############################################################################################################
         # TABLE SETUP / TAB SETUP
         self.dashboard_bar_chart()
-        self.set_awaiting_approval()
+        self.set_newest_jcns()
         self.load_work_order_data()
         self.load_inventory_data()
         self.load_charts_data()
@@ -131,7 +131,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pri_2_count.setText(str(priority_totals[2]))
         self.pri_3_count.setText(str(priority_totals[3]))
 
-    def set_awaiting_approval(self):
+    def set_newest_jcns(self):
         recentProblemsQuery = "SELECT creation_reason FROM workorders ORDER BY creation_date DESC LIMIT 5;"
         result = execute_query(recentProblemsQuery)
 
