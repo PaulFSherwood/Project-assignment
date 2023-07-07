@@ -267,25 +267,6 @@ QTableView::item:hover {
            </widget>
           </item>
           <item alignment="Qt::AlignLeft">
-           <widget class="QPushButton" name="work_orders_pushButton">
-            <property name="minimumSize">
-             <size>
-              <width>120</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>120</width>
-              <height>40</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Work Orders</string>
-            </property>
-           </widget>
-          </item>
-          <item alignment="Qt::AlignLeft">
            <widget class="QPushButton" name="inventory_pushButton">
             <property name="minimumSize">
              <size>
@@ -324,7 +305,7 @@ QTableView::item:hover {
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="CreateJCN_pushButton">
+           <widget class="QPushButton" name="addPart_pushButton">
             <property name="minimumSize">
              <size>
               <width>120</width>
@@ -338,7 +319,7 @@ QTableView::item:hover {
              </size>
             </property>
             <property name="text">
-             <string>New JCN</string>
+             <string>New Part</string>
             </property>
            </widget>
           </item>
@@ -509,7 +490,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>1</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1113,43 +1094,48 @@ QTableView::item:hover {
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="work_orders_view">
+            <widget class="QWidget" name="inventory_view">
              <layout class="QVBoxLayout" name="verticalLayout_13">
               <item>
-               <widget class="QTableWidget" name="work_order_table">
+               <widget class="QTableWidget" name="inventory_table">
                 <column>
                  <property name="text">
-                  <string>JCN</string>
+                  <string>Name</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Simulator</string>
+                  <string>Stock on hand</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Disposition</string>
+                  <string>Min Stock</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Reason</string>
+                  <string>Location</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Date</string>
+                  <string>Cost</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
-                  <string>Priority</string>
+                  <string>Vendor</string>
                  </property>
                 </column>
                 <column>
                  <property name="text">
                   <string>Notes</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Entered by</string>
                  </property>
                 </column>
                </widget>
@@ -1177,7 +1163,7 @@ QTableView::item:hover {
                     <property name="frameShadow">
                      <enum>QFrame::Raised</enum>
                     </property>
-                    <widget class="QLineEdit" name="disposition_lineEdit">
+                    <widget class="QLineEdit" name="stock_on_hand_lineEdit">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
@@ -1194,7 +1180,7 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                      </property>
                     </widget>
-                    <widget class="QLineEdit" name="simulator_lineEdit">
+                    <widget class="QLineEdit" name="location_lineEdit">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
@@ -1211,20 +1197,20 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                      </property>
                     </widget>
-                    <widget class="QLabel" name="disposition_label">
+                    <widget class="QLabel" name="stock_on_hand_label">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
                        <y>120</y>
-                       <width>81</width>
+                       <width>91</width>
                        <height>20</height>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>Disposition</string>
+                      <string>Stock on Hand</string>
                      </property>
                     </widget>
-                    <widget class="QLabel" name="JCN_label">
+                    <widget class="QLabel" name="name_label">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
@@ -1234,10 +1220,10 @@ color: rgb(66, 8, 36);</string>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>JCN</string>
+                      <string>Name</string>
                      </property>
                     </widget>
-                    <widget class="QLabel" name="simulator_label">
+                    <widget class="QLabel" name="location_label">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
@@ -1247,10 +1233,10 @@ color: rgb(66, 8, 36);</string>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>Simulator</string>
+                      <string>Location</string>
                      </property>
                     </widget>
-                    <widget class="QLineEdit" name="JCN_lineEdit">
+                    <widget class="QLineEdit" name="name_lineEdit">
                      <property name="geometry">
                       <rect>
                        <x>0</x>
@@ -1267,7 +1253,7 @@ font: 12pt &quot;Verdana&quot;;
 color: rgb(66, 8, 36);</string>
                      </property>
                     </widget>
-                    <widget class="QLabel" name="priority_label">
+                    <widget class="QLabel" name="min_stock_label">
                      <property name="geometry">
                       <rect>
                        <x>140</x>
@@ -1277,10 +1263,10 @@ color: rgb(66, 8, 36);</string>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>Priority</string>
+                      <string>Min Stock</string>
                      </property>
                     </widget>
-                    <widget class="QLineEdit" name="priority_lineEdit">
+                    <widget class="QLineEdit" name="min_stock_lineEdit">
                      <property name="geometry">
                       <rect>
                        <x>140</x>
@@ -1307,7 +1293,7 @@ color: rgb(66, 8, 36);</string>
                     <property name="frameShadow">
                      <enum>QFrame::Raised</enum>
                     </property>
-                    <widget class="QLabel" name="reason_label">
+                    <widget class="QLabel" name="cost_label">
                      <property name="geometry">
                       <rect>
                        <x>10</x>
@@ -1317,16 +1303,76 @@ color: rgb(66, 8, 36);</string>
                       </rect>
                      </property>
                      <property name="text">
-                      <string>Reason</string>
+                      <string>Cost</string>
                      </property>
                     </widget>
-                    <widget class="QTextEdit" name="reason_textEdit">
+                    <widget class="QLineEdit" name="cost_lineEdit">
                      <property name="geometry">
                       <rect>
-                       <x>0</x>
+                       <x>10</x>
                        <y>20</y>
-                       <width>241</width>
-                       <height>161</height>
+                       <width>211</width>
+                       <height>31</height>
+                      </rect>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                     </property>
+                    </widget>
+                    <widget class="QLineEdit" name="vendor_lineEdit">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>80</y>
+                       <width>211</width>
+                       <height>31</height>
+                      </rect>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                     </property>
+                    </widget>
+                    <widget class="QLabel" name="vendor_label">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>60</y>
+                       <width>121</width>
+                       <height>20</height>
+                      </rect>
+                     </property>
+                     <property name="text">
+                      <string>Vendor</string>
+                     </property>
+                    </widget>
+                    <widget class="QLabel" name="enterer_label">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>120</y>
+                       <width>121</width>
+                       <height>20</height>
+                      </rect>
+                     </property>
+                     <property name="text">
+                      <string>Entered by</string>
+                     </property>
+                    </widget>
+                    <widget class="QLineEdit" name="enterer_lineEdit">
+                     <property name="geometry">
+                      <rect>
+                       <x>10</x>
+                       <y>140</y>
+                       <width>211</width>
+                       <height>31</height>
                       </rect>
                      </property>
                      <property name="styleSheet">
@@ -1520,7 +1566,7 @@ border-radius: 10px;</string>
               </item>
              </layout>
             </widget>
-            <widget class="QWidget" name="newJCN_view">
+            <widget class="QWidget" name="addPart_view">
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
                <widget class="QTabWidget" name="newJCN_tabWidget">
@@ -1969,44 +2015,6 @@ color: rgb(66, 8, 36);</string>
                   <string>Tab 2</string>
                  </attribute>
                 </widget>
-               </widget>
-              </item>
-             </layout>
-            </widget>
-            <widget class="QWidget" name="inventory_view">
-             <layout class="QVBoxLayout" name="verticalLayout_15">
-              <item>
-               <widget class="QTableWidget" name="inventory_table">
-                <column>
-                 <property name="text">
-                  <string>Discription</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Amount</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Min Stock</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Location</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>cost</string>
-                 </property>
-                </column>
-                <column>
-                 <property name="text">
-                  <string>Employee</string>
-                 </property>
-                </column>
                </widget>
               </item>
              </layout>
