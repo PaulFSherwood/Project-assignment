@@ -15,14 +15,14 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QDialog {
-    background-color: rgb(54, 54, 54);
+    background-color: #1D2228;
 }
 QLabel {
-    color: rgb(255, 0, 127);
+    color: #FB8122;
     font-size: 15pt;
 }
 QLabel#LoginLabel {
-    color: rgb(225, 225, 225);
+    color: #FB8122;
     font-size: 24pt;
 	font-weight: bold;
 }
@@ -32,17 +32,17 @@ QLineEdit#EmailLineEdit, QLineEdit#PasswordLineEdit {
     font: 15pt &quot;Sans Serif&quot;;
 	border-style: solid;
 	border-width: 2px;
-	border-color: rgb(235, 235, 235);
+	border-color: #E1E2E2;
 }
 QLineEdit#EmailLineEdit:focus, QLineEdit#PasswordLineEdit:focus {
 	background-color: rgb(214, 214, 214);
 	color: rgb(59, 59, 59);
 }
  QPushButton {
-    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #4B0082, stop: 1 #6B728E);
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #FB8122, stop: 1 #D48166);
     border-radius: 6px;
     padding: 5px;
-    color: white;
+    color: #1D2228;
     font-weight: bold;
 }
 QPushButton:hover {;
@@ -55,10 +55,10 @@ QPushButton:pressed {
 
 
  QPushButton#GetAccountPushButton {
-    background: #6E6D70;
+    background: #E1E2E2;
     border-radius: 4px;
   	border: none;
-    color: #DFDEDF;
+    color: #1D2228;
     font: 10pt &quot;Sans Serif&quot;;
 	box-shadow: 0px 0.5px 1px rgba(0, 0, 0, 0.1), inset 0px 0.5px 0.5px rgba(255, 255, 255, 0.5), 0px 0px 0px 0.5px rgba(0, 0, 0, 0.12);
 }
@@ -91,17 +91,17 @@ QPushButton#GetAccountPushButton:pressed {
     <string>Login</string>
    </property>
   </widget>
-  <widget class="QLabel" name="EmailLabel">
+  <widget class="QLabel" name="UserNameLabel">
    <property name="geometry">
     <rect>
-     <x>110</x>
+     <x>120</x>
      <y>170</y>
      <width>54</width>
      <height>17</height>
     </rect>
    </property>
    <property name="text">
-    <string>Email</string>
+    <string>Role</string>
    </property>
   </widget>
   <widget class="QLabel" name="PasswordLabel">
@@ -117,7 +117,7 @@ QPushButton#GetAccountPushButton:pressed {
     <string>Password</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="EmailLineEdit">
+  <widget class="QLineEdit" name="UserNameLineEdit">
    <property name="geometry">
     <rect>
      <x>190</x>
@@ -140,26 +140,26 @@ QPushButton#GetAccountPushButton:pressed {
   <widget class="QPushButton" name="LoginPushButton">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>350</y>
-     <width>111</width>
-     <height>31</height>
+     <x>190</x>
+     <y>280</y>
+     <width>191</width>
+     <height>51</height>
     </rect>
    </property>
    <property name="styleSheet">
     <string notr="true"/>
    </property>
    <property name="text">
-    <string>PushButton</string>
+    <string>Login</string>
    </property>
   </widget>
   <widget class="QLabel" name="GetAccountLabel">
    <property name="geometry">
     <rect>
-     <x>90</x>
-     <y>290</y>
+     <x>80</x>
+     <y>480</y>
      <width>171</width>
-     <height>31</height>
+     <height>41</height>
     </rect>
    </property>
    <property name="text">
@@ -169,8 +169,8 @@ QPushButton#GetAccountPushButton:pressed {
   <widget class="QPushButton" name="GetAccountPushButton">
    <property name="geometry">
     <rect>
-     <x>270</x>
-     <y>300</y>
+     <x>260</x>
+     <y>490</y>
      <width>111</width>
      <height>21</height>
     </rect>

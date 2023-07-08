@@ -24,11 +24,6 @@ class Validator:
         # I wanted to add in all special characters but that could limit usernames
         sql_keywords = ['select', 'drop', ';', '--', 'insert', 'delete', 'update', 'union', 'create', 'alter']
         return not any(keyword in username.lower() for keyword in sql_keywords)
-    
-    @staticmethod
-    def validate_email(email):
-        match = re.compile(r"^[-\w\.]+@([\w-]+\.)+[\w-]{2,4}$")
-        return bool(match.fullmatch(str(email).lower()))
 
     @staticmethod
     def validate_password(password):

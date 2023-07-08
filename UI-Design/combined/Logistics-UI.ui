@@ -231,7 +231,7 @@ QTableView::item:hover {
              </font>
             </property>
             <property name="text">
-             <string>MAINTENANCE</string>
+             <string>LOGISTICS</string>
             </property>
            </widget>
           </item>

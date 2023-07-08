@@ -305,7 +305,7 @@ class MainWindow(QtWidgets.QMainWindow):
         location_types_list = "SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_NAME = 'logistics' AND COLUMN_NAME = 'location_type'"
         location_names = execute_query(location_types_list)
         enum_values = location_names[0][0].decode().split("'")[1::2]
-        print(f"enum_values: {enum_values}")
+        # print(f"enum_values: {enum_values}")
 
         for name in enum_values:
             self.locationType_comboBox.addItem(name)
