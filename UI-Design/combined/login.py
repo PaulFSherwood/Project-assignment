@@ -6,7 +6,7 @@ import subprocess
 from cryptography.fernet import Fernet
 from utilities import decrypt_config, Validator
 from database_utilites import execute_query, execute_insert_query
-from login_utilities import authenticate, get_user_role
+from login_utilities import authenticate, get_user_role, get_user_id
 
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QDialog, QApplication
@@ -46,25 +46,26 @@ class Login(QDialog):
             if authenticate(username, password):
                 # Execute the appropriate script based on the user's role
                 role = get_user_role(username)
+                user_id = get_user_id(username)
 
                 # Execute the appropriate script based on the user's role
                 if role == 'MANAGER':
                     try:
                         print("MANAGER")
                         # subprocess.Popen(["python", "management/Management-UI.py"])
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Management-UI.py"])
+                        subprocess.Popen(["/usr/local/bin/python3.9", "Management-UI.py", "--user_id", f"{user_id}"])
                     except subprocess.CalledProcessError as e:
                         print("Error executing Management script: ", e)
                 elif role == 'MAINTENANCE':
                     try:
                         print("MAINTENANCE")
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Maintenance-UI.py"])
+                        subprocess.Popen(["/usr/local/bin/python3.9", "Maintenance-UI.py", "--user_id", f"{user_id}"])
                     except subprocess.CalledProcessError as e:
                         print("Error executing Maintenance script: ", e)
                 elif role == 'LOGISTICS':
                     try:
                         print("LOGISTICS")
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Logistics-UI.py"])
+                        subprocess.Popen(["/usr/local/bin/python3.9", "Logistics-UI.py", "--user_id", f"{user_id}"])
                     except subprocess.CalledProcessError as e:
                         print("Error executing Logistics script: ", e)
                 else:

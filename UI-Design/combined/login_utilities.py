@@ -49,3 +49,25 @@ def get_user_role(username):
     db.close()
 
     return role
+
+def get_user_id(username):
+    config = decrypt_config()
+    db = mysql.connector.connect(
+        host=config['host'],
+        user=config['user'],
+        password=config['password'],
+        database=config['database']
+    )
+
+    # get user_id based on the username
+    cursor = db.cursor()
+    query = "SELECT user_id FROM users WHERE username = %s"
+    cursor.execute(query, (username,))
+    result = cursor.fetchone()
+    user_id = result[0] if result else None
+
+    # Close the database connection and cursor
+    cursor.close()
+    db.close()
+
+    return user_id

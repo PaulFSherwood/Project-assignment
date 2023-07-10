@@ -1,5 +1,6 @@
 import os
 import sys
+import argparse
 import mysql.connector
 
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
@@ -88,11 +89,18 @@ class MainWindow(QtWidgets.QMainWindow):
     def open_sign_off_panel(self, label, jcn_num):
         if label.text() != "...":
             self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
-            sign_off_id = 2  # Hard-coded for demonstration purposes, replace with appropriate value or logic
+            parser = argparse.ArgumentParser()
+            parser.add_argument('--user_id', type=int)
+            args = parser.parse_args()
+            sign_off_id = args.user_id
             
             def execute_and_hide():
                 query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = '{label.text()}' AND jcn = '{jcn_num.text()}' AND {sign_off_id} IN (SELECT user_id FROM users)"
                 execute_insert_query(query)
+
+                # update the set count table
+                self.set_awaiting_approval()
+
                 self.right_menu_widget.setHidden(not self.right_menu_widget.isHidden())
 
             self.sign_off_button.clicked.connect(execute_and_hide)
@@ -146,6 +154,16 @@ class MainWindow(QtWidgets.QMainWindow):
     def set_awaiting_approval(self):
         query = "SELECT creation_reason, jcn FROM flight_simulator_db.workorders WHERE signed_off_id IS NULL OR signed_off_id = '' ORDER BY creation_date DESC LIMIT 5"
         result = execute_query(query)
+
+        # clear all the fields first
+        for i in range(1, 6):
+            set_0 = f"set_{i}_count"
+            set_1 = f"jcn_num_{i}"
+            txt_label = getattr(self, set_0, None)
+            jcn_label = getattr(self, set_1, None)
+            if txt_label is not None:
+                txt_label.setText("...")
+                jcn_label.setText("...")
 
         # Update the label with text from result or with an qta icon
         for i, set in enumerate(result):
