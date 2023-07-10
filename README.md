@@ -17,6 +17,7 @@ The following tasks are yet to be completed for the project:
 3. Allow users to change the work order state to ready for close
 4. Update all UI's if they do not look right.
 5. Look into adding schedule UI and tasks
+6. Maint. should be able to switch work orders to be in any state.  May need to have it switch screens.
 
 ## Application Preview
 
