@@ -10,9 +10,9 @@ This project contains a management user interface (UI) for an application. The m
 
 The following tasks are yet to be completed for the project:
 
-1. Complete chart integration.
-  1a. Complete logistic charts
-  1b. Check all charts for appropriate data
+1. Complete chart integration.\
+  1a. Complete logistic charts\
+  1b. Check all charts for appropriate data\
   1c. Fix the sign-off bug that doesn't resize the chart after it is hidden.
 3. Allow users to change the work order state to ready for close
 4. Update all UI's if they do not look right.
