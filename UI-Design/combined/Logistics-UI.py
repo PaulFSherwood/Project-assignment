@@ -7,7 +7,7 @@ import datetime
 
 # Python bindings for Qt
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
-from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet, QBarSeries
+from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QBarSet, QBarSeries, QDateTimeAxis, QValueAxis, QBarCategoryAxis, QBarSet
 from PyQt6.QtCore import Qt, QPointF, QTimer, QDateTime
 from PyQt6.QtGui import QPainter
 
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow):
     ############################################################################################################
     # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
-        dashQuery = "CALL show_parts_data()"
+        dashQuery = "CALL ShowPartsData()"
         work_order_count_per_day = execute_query(dashQuery)
 
         dashBoardBarSeries = QBarSeries(self)
@@ -241,20 +241,34 @@ class MainWindow(QtWidgets.QMainWindow):
     #############################################################################################################
     # LOAD CHARTS DATA SECTION 
     def load_charts_data(self):
-        # Call DB stored procedure GetWorkOrderCountPerDay() to get the last 7 days of data
-        topQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day_data = execute_query(topQuery)
+        # Call DB stored procedure ShowPartsData() to get the last 7 days of data
+        topQuery = "CALL ShowPartsData()"
 
-        # Send data to the QLineSeries chart
-        topSeries = QLineSeries(self)
+        parts_data = execute_query(topQuery)
+        # item_name, cost_per_item, due_date, priority
+        topSeries = QBarSeries()
 
-        for x, y in enumerate(work_order_count_per_day_data):
-            point = QPointF(x, y[1])
-            topSeries.append(point)
+        barSet = QBarSet("Cost per Item")
+
+        for row in parts_data:
+            item_name = row[0]
+            cost_per_item = float(row[1])
+
+            barSet.append(cost_per_item)
+
+        topSeries.append(barSet)
 
         topChart = QChart()
         topChart.addSeries(topSeries)
-        topChart.createDefaultAxes()
+        # topChart.setTitle("Parts Cost")
+
+        axisX = QBarCategoryAxis()
+        topChart.addAxis(axisX, Qt.AlignmentFlag.AlignBottom)
+        topSeries.attachAxis(axisX)
+
+        axisY = QValueAxis()
+        topChart.addAxis(axisY, Qt.AlignmentFlag.AlignLeft)
+        topSeries.attachAxis(axisY)
 
         self.topChartview = QChartView()
         self.topChartview.setChart(topChart)
@@ -264,20 +278,35 @@ class MainWindow(QtWidgets.QMainWindow):
         self.topChartview.resize(self.chart_top.size())
         self.topChartview.show()
 
-        ## Bottom chart
-        bottomQuery = "CALL GetHoursWorkedPerPerson()"
-        hours_worked_per_person_data = execute_query(bottomQuery)
 
 
-        bottomSeries = QPieSeries()
-        for row in hours_worked_per_person_data:
-            username = row[0]
-            total_hours = row[1]
-            bottomSeries.append(username, total_hours)
+
+
+        # ## Bottom chart
+        getInventoryData = "CALL GetInventoryData()"
+        inventory_data = execute_query(getInventoryData)
+        # print(f"Inventory data: {inventory_data}")
+
+        bottomSeries = QBarSeries()
+
+        for row in inventory_data:
+            item_name = row[1]
+            stock_on_hand = row[0]
+            stock = int(stock_on_hand)
+            cost_per_item = row[4]
+
+            item_set = QBarSet(item_name)
+            item_set.append(stock)
+
+            cost_set = QBarSet(item_name)
+            cost_set.append(cost_per_item)
+
+            bottomSeries.append(item_set)
+            bottomSeries.append(cost_set)
 
         bottomChart = QChart()
         bottomChart.addSeries(bottomSeries)
-        bottomChart.setTitle("Work load by shift")
+        bottomChart.setTitle("Inventory")
 
         self.bottomChartview = QChartView()
         self.bottomChartview.setChart(bottomChart)
@@ -286,6 +315,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bottomChartview.setParent(self.chart_bottom)
         self.bottomChartview.resize(self.chart_bottom.size())
         self.bottomChartview.show()
+
+
 
     ############################################################################################################
     ## NEW JCN's SECTION

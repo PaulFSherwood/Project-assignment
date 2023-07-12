@@ -200,7 +200,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #########################
         ## LOWER TABLE
-        parts_data = execute_query("CALL show_parts_data()")
+        parts_data = execute_query("CALL ShowPartsData()")
         # set the number of rows
         self.cost_lower_table.setRowCount(len(parts_data))
         # hide row numbers
