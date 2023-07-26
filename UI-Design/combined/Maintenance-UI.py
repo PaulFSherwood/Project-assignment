@@ -232,10 +232,38 @@ class MainWindow(QtWidgets.QMainWindow):
         # Now update your line edits and text edits with the content from the clicked row
         self.JCN_lineEdit.setText(jcn_item.text())
         self.simulator_lineEdit.setText(simulator_item.text())
-        self.disposition_lineEdit.setText(disposition_item.text())
+
+        # Check if the disposition is "INW" to decide whether to lock the fields
+        current_disposition = disposition_item.text()
+        is_disabled = current_disposition == "INW"
+        self.disposition_comboBox.setCurrentText(current_disposition)
+        # self.disposition_comboBox.setEnabled(is_disabled)
+
+        #self.disposition_lineEdit.setText(disposition_item.text())  
+        # Update the disposition_comboBox with the list of AWE, AWM, AWT, INW, or CLO  Then make the current selected to be what is in the disposition text
+        options = ['AWE', 'AWM', 'AWT', 'INW', 'CLO']
+        self.disposition_comboBox.clear()
+        self.disposition_comboBox.addItems(options)
+
+        current_disposition = disposition_item.text()
+        print(current_disposition)
+        if current_disposition in options:
+            self.disposition_comboBox.setCurrentText(current_disposition)
+        else:
+            # If it is in th elist
+            self.disposition_comboBox.addItem(current_disposition)
+            self.disposition_comboBox.setCurrentText(current_disposition)
+
+
+
         self.priority_lineEdit.setText(priority_item.text())
+
+        # lock fields if INW
         self.reason_textEdit.setText(reason_item.text())
+        self.reason_textEdit.setEnabled(is_disabled)
+
         self.notes_textEdit.setText(notes_item.text())
+        self.notes_textEdit.setEnabled(is_disabled)
 
     ##############################################################################################################
     # INVENTORY SECTION
