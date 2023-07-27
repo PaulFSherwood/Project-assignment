@@ -495,7 +495,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>4</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1633,12 +1633,22 @@ padding-bottom: 1px;
            <rect>
             <x>9</x>
             <y>9</y>
-            <width>64</width>
-            <height>16</height>
+            <width>141</width>
+            <height>91</height>
            </rect>
           </property>
+          <property name="styleSheet">
+           <string notr="true">font-family: &quot;Dejavu Sans&quot;, sans-serif;
+font-size: 20px;</string>
+          </property>
           <property name="text">
-           <string>NEW TEXT</string>
+           <string>For managers only</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
          <widget class="QPushButton" name="sign_off_button">
@@ -1682,6 +1692,36 @@ padding-bottom: 1px;
           </property>
           <property name="text">
            <string>Sign Off</string>
+          </property>
+         </widget>
+         <widget class="QLabel" name="cool_thing_2">
+          <property name="geometry">
+           <rect>
+            <x>0</x>
+            <y>240</y>
+            <width>141</width>
+            <height>181</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <family>Dejavu Sans</family>
+            <pointsize>-1</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">font-family: &quot;Dejavu Sans&quot;, sans-serif;
+font-size: 20px;</string>
+          </property>
+          <property name="text">
+           <string>Preforming this action will complete the sign off process</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
           </property>
          </widget>
         </widget>
