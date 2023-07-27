@@ -47,11 +47,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.charts_pushButton.clicked.connect(lambda: self.switch_page(self.charts_view, "CHARTS"))
         # self.CreateJCN_pushButton.clicked.connect(lambda: self.switch_page(self.newJCN_view, "NEW JCN"))
         self.CreateJCN_pushButton.clicked.connect(self.update_new_jcn_fields)
+        self.disposition_comboBox.currentIndexChanged.connect(self.on_disposition_changed)
 
         ############################################################################################################
         # USER ACTION UPDATES
         self.work_order_table.cellClicked.connect(self.update_line_edits)  
-        self.addJCN_pushButton.clicked.connect(self.add_new_jcn)      
+        self.addJCN_pushButton.clicked.connect(self.add_new_jcn)     
+        self.update_pushButton.clicked.connect(self.update_jcn_database) 
 
         ############################################################################################################
         # TABLE SETUP / TAB SETUP
@@ -235,35 +237,62 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Check if the disposition is "INW" to decide whether to lock the fields
         current_disposition = disposition_item.text()
-        is_disabled = current_disposition == "INW"
         self.disposition_comboBox.setCurrentText(current_disposition)
-        # self.disposition_comboBox.setEnabled(is_disabled)
-
-        #self.disposition_lineEdit.setText(disposition_item.text())  
+ 
         # Update the disposition_comboBox with the list of AWE, AWM, AWT, INW, or CLO  Then make the current selected to be what is in the disposition text
         options = ['AWE', 'AWM', 'AWT', 'INW', 'CLO']
         self.disposition_comboBox.clear()
         self.disposition_comboBox.addItems(options)
 
-        current_disposition = disposition_item.text()
-        print(current_disposition)
-        if current_disposition in options:
-            self.disposition_comboBox.setCurrentText(current_disposition)
-        else:
-            # If it is in th elist
-            self.disposition_comboBox.addItem(current_disposition)
-            self.disposition_comboBox.setCurrentText(current_disposition)
-
-
-
         self.priority_lineEdit.setText(priority_item.text())
 
         # lock fields if INW
         self.reason_textEdit.setText(reason_item.text())
-        self.reason_textEdit.setEnabled(is_disabled)
+        # self.reason_textEdit.setEnabled(is_disabled)
 
         self.notes_textEdit.setText(notes_item.text())
+        # self.notes_textEdit.setEnabled(is_disabled)
+
+
+    def on_disposition_changed(self, index):
+        # Get the current text
+        current_disposition = self.disposition_comboBox.currentText()
+        # print(current_disposition)
+        is_disabled = current_disposition == "INW"
+
+        # if the current_dispositiion is not "INW" then setEnabled should be false
+        self.JCN_lineEdit.setEnabled(is_disabled)
+        self.simulator_lineEdit.setEnabled(is_disabled)
+        self.priority_lineEdit.setEnabled(is_disabled)
+        self.reason_textEdit.setEnabled(is_disabled)
         self.notes_textEdit.setEnabled(is_disabled)
+
+    def update_jcn_database(self):
+        # Get the current values from the line edits
+        jcn = self.JCN_lineEdit.text()
+        simulator = self.simulator_lineEdit.text()
+        priority = self.priority_lineEdit.text()
+        reason = self.reason_textEdit.toPlainText()
+        notes = self.notes_textEdit.toPlainText()
+        disposition = self.disposition_comboBox.currentText()
+
+        # Get the simulator_id from the simulator name
+        simulator_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
+        simulator_id = execute_query(simulator_id_query, (simulator,))[0][0]
+
+        # Update the database
+        update_query = "UPDATE workorders SET simulator_id = %s, priority = %s, creation_reason = %s, correction_note = %s, disposition = %s WHERE jcn = %s"
+        execute_insert_query(update_query, (simulator_id, priority, reason, notes, disposition, jcn))
+
+        # Clear the fields
+        self.JCN_lineEdit.clear()
+        self.simulator_lineEdit.clear()
+        self.priority_lineEdit.clear()
+        self.reason_textEdit.clear()
+        self.notes_textEdit.clear()
+        self.disposition_comboBox.clear()
+        # update jcn number
+        self.load_work_order_data()
 
     ##############################################################################################################
     # INVENTORY SECTION
