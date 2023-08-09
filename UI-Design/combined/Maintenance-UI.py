@@ -97,8 +97,14 @@ class MainWindow(QtWidgets.QMainWindow):
     # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
         dashQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day = execute_query(dashQuery)
-
+        try:
+            work_order_count_per_day = execute_query(dashQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_count_per_day:
+            print("The query is empty.")
+            
         dashBoardBarSeries = QBarSeries(self)
 
         for x, y in enumerate(work_order_count_per_day):
@@ -119,8 +125,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.dashBoardChartView.show()
 
     def set_priority_counts(self):
-        query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
-        result = execute_query(query)
+        priorityQuery = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
+        try:
+            result = execute_query(priorityQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         # Store the counts
         priority_totals = {}
@@ -135,7 +147,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_newest_jcns(self):
         recentProblemsQuery = "SELECT creation_reason FROM workorders ORDER BY creation_date DESC LIMIT 5;"
-        result = execute_query(recentProblemsQuery)
+
+        try:
+            result = execute_query(recentProblemsQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         for i, work_order in enumerate(result):
             label_name = f"set_{i+1}_count"
@@ -160,8 +179,14 @@ class MainWindow(QtWidgets.QMainWindow):
             JOIN \
                 simulators ON workorders.simulator_id = simulators.simulator_id"
 
-        # Fetch all the rows returned by the query
-        work_order_data = execute_query(query)
+        try:
+            # Fetch all the rows returned by the query
+            work_order_data = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_data:
+            print("The query is empty.")
 
         # set the number of rows
         self.work_order_table.setRowCount(len(work_order_data))
@@ -278,7 +303,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Get the simulator_id from the simulator name
         simulator_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
-        simulator_id = execute_query(simulator_id_query, (simulator,))[0][0]
+
+        try:
+            simulator_id = execute_query(simulator_id_query, (simulator,))[0][0]
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not simulator_id:
+            print("The query is empty.")
+            return
 
         # Update the database
         update_query = "UPDATE workorders SET simulator_id = %s, priority = %s, creation_reason = %s, correction_note = %s, disposition = %s WHERE jcn = %s"
@@ -299,7 +332,9 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_inventory_data(self):
         # Execute the query to fetch the data
         query = "CALL GetInventoryData()"
-        inventory_data = execute_query(query)
+
+        try:
+            inventory_data = execute_query(query)
 
         # set the number of rows
         self.inventory_table.setRowCount(len(inventory_data))
