@@ -2,6 +2,7 @@
 
 import os
 import sys
+import qtawesome
 import mysql.connector
 import datetime
 
@@ -453,6 +454,10 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
+    # Create an icon
+    icon = qtawesome.icon("fa.server", color="#404258")
+    app.setWindowIcon(icon)
+    
     window = MainWindow()
     window.show()
 

@@ -2,6 +2,7 @@ import sys
 import json
 import getpass
 import bcrypt
+import qtawesome
 import subprocess
 from cryptography.fernet import Fernet
 from utilities import decrypt_config, Validator
@@ -132,6 +133,11 @@ class CreateAcc(QDialog):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+
+    # Create an icon
+    icon = qtawesome.icon("fa.server", color="#404258")
+    app.setWindowIcon(icon)
+    
     mainwindow = Login()
     widget = QtWidgets.QStackedWidget()
     widget.addWidget(mainwindow)

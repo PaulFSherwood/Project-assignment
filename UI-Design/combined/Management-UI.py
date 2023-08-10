@@ -1,6 +1,7 @@
 import os
 import sys
 import argparse
+import qtawesome
 import mysql.connector
 
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
@@ -402,6 +403,10 @@ class MainWindow(QtWidgets.QMainWindow):
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
 
+    # Create an icon
+    icon = qtawesome.icon("fa.server", color="#404258")
+    app.setWindowIcon(icon)
+    
     window = MainWindow()
     window.show()
 
