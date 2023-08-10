@@ -115,7 +115,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def dashboard_bar_chart(self):
 
         dashQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day = execute_query(dashQuery)
+
+        try:
+            work_order_count_per_day = execute_query(dashQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_count_per_day:
+            return
 
         dashBoardBarSeries = QBarSeries(self)
 
@@ -138,7 +145,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
-        result = execute_query(query)
+
+        try:
+            result = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         # Store the counts
         priority_totals = {}
@@ -153,7 +167,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_awaiting_approval(self):
         query = "SELECT creation_reason, jcn FROM flight_simulator_db.workorders WHERE signed_off_id IS NULL OR signed_off_id = '' ORDER BY creation_date DESC LIMIT 5"
-        result = execute_query(query)
+        
+        try:
+            result = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         # clear all the fields first
         for i in range(1, 6):
@@ -183,7 +204,14 @@ class MainWindow(QtWidgets.QMainWindow):
         #########################
         ## UPPER TABLE
         query = "CALL GetTechSummary()"
-        tech_cost_data = execute_query(query)
+
+        try:
+            tech_cost_data = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not tech_cost_data:
+            print("The query is empty.")
 
         # print(tech_cost_data)
 
@@ -200,7 +228,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         #########################
         ## LOWER TABLE
-        parts_data = execute_query("CALL ShowPartsData()")
+
+        try:
+            parts_data = execute_query("CALL ShowPartsData()")
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not parts_data:
+            print("The query is empty.")
+
         # set the number of rows
         self.cost_lower_table.setRowCount(len(parts_data))
         # hide row numbers
@@ -216,8 +252,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # Execute the query to fetch the data
         query = "SELECT jcn, creation_reason, reported_by_name, priority, notes FROM workorders"
 
-        # Fetch all the rows returned by the query
-        work_order_data = execute_query(query)
+        try:
+            # Fetch all the rows returned by the query
+            work_order_data = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_data:
+            print("The query is empty.")
 
         # set the number of rows
         self.work_order_table.setRowCount(len(work_order_data))
@@ -298,7 +340,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_charts_data(self):
         # Call DB stored procedure GetWorkOrderCountPerDay() to get the last 7 days of data
         topQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day_data = execute_query(topQuery)
+
+        try:
+            work_order_count_per_day_data = execute_query(topQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_count_per_day_data:
+            print("The query is empty.")
 
         # Send data to the QLineSeries chart
         topSeries = QLineSeries(self)
@@ -321,7 +370,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ## Bottom chart
         bottomQuery = "CALL GetHoursWorkedPerPerson()"
-        hours_worked_per_person_data = execute_query(bottomQuery)
+
+        try:
+            hours_worked_per_person_data = execute_query(bottomQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not hours_worked_per_person_data:
+            print("The query is empty.")
 
 
         bottomSeries = QPieSeries()

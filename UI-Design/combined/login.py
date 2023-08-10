@@ -32,14 +32,17 @@ class Login(QDialog):
     def loginfunction(self):
         username = self.UserNameLineEdit.text()
         password = self.PasswordLineEdit.text()
+
         print(f"Username: {username} || Password: {password}")
         print(f"{Validator.validate_username(username)}")
+
         if not Validator.validate_username(username):
             self.UserNameLineEdit.setText("Invalid username")
             return
         elif not Validator.validate_password(password):
             self.PasswordLineEdit.setText("Invalid password")
             return
+        
         else:
             # switch to the appropriate screen
             # Authenticate the user

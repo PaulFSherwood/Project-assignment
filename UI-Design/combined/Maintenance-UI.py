@@ -97,6 +97,7 @@ class MainWindow(QtWidgets.QMainWindow):
     # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
         dashQuery = "CALL GetWorkOrderCountPerDay()"
+
         try:
             work_order_count_per_day = execute_query(dashQuery)
         except Exception as e:
@@ -104,7 +105,7 @@ class MainWindow(QtWidgets.QMainWindow):
             return
         if not work_order_count_per_day:
             print("The query is empty.")
-            
+
         dashBoardBarSeries = QBarSeries(self)
 
         for x, y in enumerate(work_order_count_per_day):
@@ -126,6 +127,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_priority_counts(self):
         priorityQuery = "SELECT priority, COUNT(*) FROM workorders GROUP BY priority"
+
         try:
             result = execute_query(priorityQuery)
         except Exception as e:
@@ -335,6 +337,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
         try:
             inventory_data = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not inventory_data:
+            print("The query is empty.")
 
         # set the number of rows
         self.inventory_table.setRowCount(len(inventory_data))
@@ -368,7 +375,14 @@ class MainWindow(QtWidgets.QMainWindow):
     def load_charts_data(self):
         # Call DB stored procedure GetWorkOrderCountPerDay() to get the last 7 days of data
         topQuery = "CALL GetWorkOrderCountPerDay()"
-        work_order_count_per_day_data = execute_query(topQuery)
+
+        try:
+            work_order_count_per_day_data = execute_query(topQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_count_per_day_data:
+            print("The query is empty.")
 
         # Send data to the QLineSeries chart
         topSeries = QLineSeries(self)
@@ -391,7 +405,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
         ## Bottom chart
         bottomQuery = "CALL GetHoursWorkedPerPerson()"
-        hours_worked_per_person_data = execute_query(bottomQuery)
+
+        try:
+            hours_worked_per_person_data = execute_query(bottomQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not hours_worked_per_person_data:
+            print("The query is empty.")
 
 
         bottomSeries = QPieSeries()
@@ -425,7 +446,14 @@ class MainWindow(QtWidgets.QMainWindow):
         
         # Get the current number of JCNs
         query = f"SELECT COUNT(*) FROM workorders WHERE DATE(creation_date) = CURDATE() AND jcn LIKE '{date}%'" # fstring required for the date
-        count = execute_query(query)[0][0]
+
+        try:
+            count = execute_query(query)[0][0]
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not count:
+            print("The query is empty.")
         # make the new jcn number
         jcn_number = f"{date}{str(count + 1).zfill(3)}" # zfill is used to pad the number with 0's
         # set the new jcn number
@@ -480,10 +508,22 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # Get simulator_id and subsystem_id from the names
         sim_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
-        sim_id = execute_query(sim_id_query, (simulator,))[0][0]
+        try:
+            sim_id = execute_query(sim_id_query, (simulator,))[0][0]
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not sim_id:
+            print("The query is empty.")
 
         subs_id_query = "SELECT subsystem_id FROM subsystems WHERE name = %s"
-        subs_id = execute_query(subs_id_query, (subsystem,))[0][0]
+        try:
+            subs_id = execute_query(subs_id_query, (subsystem,))[0][0]
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not subs_id:
+            print("The query is empty.")
 
         print(f"jcn: {jcn} reportedBy: {reportedBy} disposition: {disposition} creation_reason: {creation_reason} \
                 creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \

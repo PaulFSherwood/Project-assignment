@@ -85,7 +85,14 @@ class MainWindow(QtWidgets.QMainWindow):
     # DASHBOARD FUNCTIONS
     def dashboard_bar_chart(self):
         dashQuery = "CALL ShowPartsData()"
-        work_order_count_per_day = execute_query(dashQuery)
+        
+        try:
+            work_order_count_per_day = execute_query(dashQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not work_order_count_per_day:
+            print("The query is empty.")
 
         dashBoardBarSeries = QBarSeries(self)
 
@@ -108,7 +115,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_priority_counts(self):
         query = "SELECT priority, COUNT(*) FROM logistics GROUP BY priority"
-        result = execute_query(query)
+
+        try:
+            result = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         # Store the counts
         priority_totals = {}
@@ -123,7 +137,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def set_newest_jcns(self):
         recentProblemsQuery = "SELECT item_name FROM logistics ORDER BY due_date DESC LIMIT 5;"
-        result = execute_query(recentProblemsQuery)
+
+        try:
+            result = execute_query(recentProblemsQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
 
         for i, work_order in enumerate(result):
             label_name = f"set_{i+1}_count"
@@ -152,8 +173,15 @@ class MainWindow(QtWidgets.QMainWindow):
             JOIN \
                 users ON logistics.entered_by = users.user_id"
 
-        # Fetch all the rows returned by the query
-        inventory_data = execute_query(query)
+        try:
+            # Fetch all the rows returned by the query
+            inventory_data = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not inventory_data:
+            print("The query is empty.")
+
         # print first row of the query
         # print(inventory_data[2])
 
@@ -244,7 +272,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # Call DB stored procedure ShowPartsData() to get the last 7 days of data
         topQuery = "CALL ShowPartsData()"
 
-        parts_data = execute_query(topQuery)
+        try:
+            parts_data = execute_query(topQuery)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not parts_data:
+            print("The query is empty.")
+
         # item_name, cost_per_item, due_date, priority
         topSeries = QBarSeries()
 
@@ -284,7 +319,15 @@ class MainWindow(QtWidgets.QMainWindow):
 
         # ## Bottom chart
         getInventoryData = "CALL GetInventoryData()"
-        inventory_data = execute_query(getInventoryData)
+
+        try:
+            inventory_data = execute_query(getInventoryData)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not inventory_data:
+            print("The query is empty.")
+
         # print(f"Inventory data: {inventory_data}")
 
         bottomSeries = QBarSeries()
@@ -334,7 +377,15 @@ class MainWindow(QtWidgets.QMainWindow):
         # Update locationType_comboBox with enums from location_type in the logistics table
         # location_types_list = "SELECT location_type FROM logistics"
         location_types_list = "SELECT COLUMN_TYPE FROM information_schema.COLUMNS WHERE TABLE_NAME = 'logistics' AND COLUMN_NAME = 'location_type'"
-        location_names = execute_query(location_types_list)
+        
+        try:
+            location_names = execute_query(location_types_list)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not location_names:
+            print("The query is empty.")
+
         enum_values = location_names[0][0].decode().split("'")[1::2]
         # print(f"enum_values: {enum_values}")
 
