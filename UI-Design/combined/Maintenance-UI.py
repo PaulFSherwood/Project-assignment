@@ -303,6 +303,8 @@ class MainWindow(QtWidgets.QMainWindow):
         notes = self.notes_textEdit.toPlainText()
         disposition = self.disposition_comboBox.currentText()
 
+        print("Disposition: ", disposition)
+
         # Get the simulator_id from the simulator name
         simulator_id_query = "SELECT simulator_id FROM simulators WHERE model = %s"
 
