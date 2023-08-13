@@ -155,6 +155,7 @@ ClientBin/
 *.[Pp]ublish.xml
 *.pfx
 *.publishsettings
+UI-Design/combined/public.key
 
 # RIA/Silverlight projects
 Generated_Code/
