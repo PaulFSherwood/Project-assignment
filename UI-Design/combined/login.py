@@ -30,12 +30,22 @@ class Login(QDialog):
         self.PasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.GetAccountPushButton.clicked.connect(self.gotocreateacc)
 
+    def lauch_by_os(self, script_name, user_id):
+        os = sys.platform
+        try:
+            if os == 'linux':
+                subprocess.Popen(["/usr/local/bin/python3.9", f"{script_name}", "--user_id", f"{user_id}"])
+            elif os == 'win32':
+                subprocess.Popen(["python", f"{script_name}", "--user_id", f"{user_id}"])
+        except subprocess.CalledProcessError as e:
+            print("Error executing script: ", e)
+
     def loginfunction(self):
         username = self.UserNameLineEdit.text()
         password = self.PasswordLineEdit.text()
 
-        print(f"Username: {username} || Password: {password}")
-        print(f"{Validator.validate_username(username)}")
+        # print(f"Username: {username} || Password: {password}")
+        # print(f"{Validator.validate_username(username)}")
 
         if not Validator.validate_username(username):
             self.UserNameLineEdit.setText("Invalid username")
@@ -54,24 +64,11 @@ class Login(QDialog):
 
                 # Execute the appropriate script based on the user's role
                 if role == 'MANAGER':
-                    try:
-                        print("MANAGER")
-                        # subprocess.Popen(["python", "management/Management-UI.py"])
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Management-UI.py", "--user_id", f"{user_id}"])
-                    except subprocess.CalledProcessError as e:
-                        print("Error executing Management script: ", e)
+                    self.lauch_by_os("Management-UI.py", user_id)
                 elif role == 'MAINTENANCE':
-                    try:
-                        print("MAINTENANCE")
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Maintenance-UI.py", "--user_id", f"{user_id}"])
-                    except subprocess.CalledProcessError as e:
-                        print("Error executing Maintenance script: ", e)
+                    self.lauch_by_os("Maintenance-UI.py", user_id)
                 elif role == 'LOGISTICS':
-                    try:
-                        print("LOGISTICS")
-                        subprocess.Popen(["/usr/local/bin/python3.9", "Logistics-UI.py", "--user_id", f"{user_id}"])
-                    except subprocess.CalledProcessError as e:
-                        print("Error executing Logistics script: ", e)
+                    self.lauch_by_os("Logistics-UI.py", user_id)
                 else:
                     print("Default failure, no script found to run.")
                     sys.exit(1)
