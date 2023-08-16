@@ -1,3 +1,5 @@
+May need:
+sudo apt install python3-pip
 
 ## LOCAL LIBRARIES
 utilities
