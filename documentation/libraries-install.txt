@@ -39,19 +39,20 @@ Built-in Python module
 
 ## REQUIRED LIBRARIES
 bcrypt
-pip install bcrypt
+python3.9 -m pip install bcrypt
 
 qtawesome
-pip install qtawesome
+python3.9 -m pip install qtawesome
 
 mysql.connector
-pip install mysql-connector-python
+python3.9 -m pip install mysql-connector-python
 
 cryptography.fernet
-pip install cryptography
+python3.9 -m pip install cryptography
 
 PyQt6
-pip install PyQt6
+python3.9 -m pip install PyQt6
 
 PyQt6.QtCharts
-pip install PyQt6-QtCharts
+python3.9 -m pip install PyQt6-QtCharts
+python3.9 -m pip install PyQtChart
