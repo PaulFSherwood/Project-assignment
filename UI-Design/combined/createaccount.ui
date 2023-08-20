@@ -179,7 +179,7 @@ QPushButton#GetAccountPushButton:pressed {
   <widget class="QLabel" name="RoleLabel">
    <property name="geometry">
     <rect>
-     <x>170</x>
+     <x>160</x>
      <y>220</y>
      <width>51</width>
      <height>20</height>

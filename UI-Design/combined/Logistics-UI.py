@@ -2,7 +2,6 @@
 
 import os
 import sys
-import qtawesome
 import mysql.connector
 import datetime
 
@@ -13,7 +12,7 @@ from PyQt6.QtCore import Qt, QPointF, QTimer, QDateTime
 from PyQt6.QtGui import QPainter
 
 # Icon library
-import qtawesome as qta
+import qtawesome # load last to avoid using PyQt5 and breaking icons
 
 from utilities import decrypt_config
 from database_utilites import execute_query, execute_insert_query
@@ -24,17 +23,22 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__(parent)
         uic.loadUi('Logistics-UI.ui', self)
 
+        # Set window icon
+        logisticsSet = "mdi.store-24-hour" # fa.wrench
+        logisticsIcon = qtawesome.icon(logisticsSet, color="#404258")
+        app.setWindowIcon(logisticsIcon)
+
         ############################################################################################################
         # ICON SETUP (qta-browser)
         # Setting up icons for each button (couldn't find another way to show icons but with buttons)
-        self.left_menu_button.setIcon(qta.icon('fa5s.sign-in-alt', color='orange', hflip=True))
-        self.pushButton_7.setIcon(qta.icon('fa.wrench', color='orange'))
+        self.left_menu_button.setIcon(qtawesome.icon('fa5s.sign-in-alt', color='orange', hflip=True))
+        self.pushButton_7.setIcon(qtawesome.icon(logisticsSet, color='orange'))
         self.pushButton_7.setIconSize(QtCore.QSize(32, 32))  # Rezise the icon to 32x32
 
-        self.dashboard_pushButton.setIcon(qta.icon('mdi.monitor-dashboard', color='orange'))
-        self.inventory_pushButton.setIcon(qta.icon('mdi.warehouse', color='orange'))
-        self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
-        self.addPart_pushButton.setIcon(qta.icon('mdi6.file-document-edit-outline', color='orange'))
+        self.dashboard_pushButton.setIcon(qtawesome.icon('mdi.monitor-dashboard', color='orange'))
+        self.inventory_pushButton.setIcon(qtawesome.icon('mdi.warehouse', color='orange'))
+        self.charts_pushButton.setIcon(qtawesome.icon('mdi6.chart-areaspline', color='orange'))
+        self.addPart_pushButton.setIcon(qtawesome.icon('mdi6.file-document-edit-outline', color='orange'))
 
         ############################################################################################################
         # BUTTON CONNECTIONS (signals and slots)
@@ -453,10 +457,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-
-    # Create an icon
-    icon = qtawesome.icon("fa.server", color="#404258")
-    app.setWindowIcon(icon)
     
     window = MainWindow()
     window.show()

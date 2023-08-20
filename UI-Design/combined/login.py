@@ -2,16 +2,18 @@ import sys
 import json
 import getpass
 import bcrypt
-import qtawesome
 import subprocess
 from cryptography.fernet import Fernet
 from utilities import decrypt_config, Validator
 from database_utilites import execute_query, execute_insert_query
 from login_utilities import authenticate, get_user_role, get_user_id
 
+
 from PyQt6 import QtWidgets
-from PyQt6.QtWidgets import QDialog, QApplication
+from PyQt6.QtWidgets import QDialog, QApplication, QMainWindow
+from PyQt6.QtGui import QIcon
 from PyQt6.uic import loadUi
+import qtawesome  #load last to avoid using PyQt5 and breaking icons
 
 # Decrypt and save the config
 config = decrypt_config()
@@ -26,10 +28,15 @@ class Login(QDialog):
     def __init__(self):
         super(Login, self).__init__()
         loadUi("login.ui",self)
+
+        # Set window icon
+        icon = qtawesome.icon("mdi6.login-variant", color="#404258")
+        app.setWindowIcon(icon)
+
         self.LoginPushButton.clicked.connect(self.loginfunction)
         self.PasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.GetAccountPushButton.clicked.connect(self.gotocreateacc)
-
+        
     def lauch_by_os(self, script_name, user_id):
         os = sys.platform
         try:
@@ -130,10 +137,6 @@ class CreateAcc(QDialog):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-
-    # Create an icon
-    icon = qtawesome.icon("fa.server", color="#404258")
-    app.setWindowIcon(icon)
     
     mainwindow = Login()
     widget = QtWidgets.QStackedWidget()

@@ -509,7 +509,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>4</number>
+             <number>0</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1518,9 +1518,9 @@ border-radius: 10px;</string>
                  <widget class="QPushButton" name="update_pushButton">
                   <property name="geometry">
                    <rect>
-                    <x>639</x>
+                    <x>659</x>
                     <y>144</y>
-                    <width>91</width>
+                    <width>71</width>
                     <height>41</height>
                    </rect>
                   </property>
@@ -1540,7 +1540,7 @@ QPushButton:hover {
 }</string>
                   </property>
                   <property name="text">
-                   <string>PushButton</string>
+                   <string>Submit</string>
                   </property>
                  </widget>
                 </widget>

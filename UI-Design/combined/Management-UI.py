@@ -1,7 +1,6 @@
 import os
 import sys
 import argparse
-import qtawesome
 import mysql.connector
 
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
@@ -9,7 +8,7 @@ from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet,
 from PyQt6.QtCore import Qt, QPointF, QTimer
 from PyQt6.QtGui import QPainter
 
-import qtawesome as qta
+import qtawesome
 
 from database_utilites import execute_query, execute_insert_query
 
@@ -18,20 +17,25 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__(parent)
         uic.loadUi('Management-UI.ui', self)
 
+        # Set window icon
+        managementSet = "fa5s.user-tie"
+        managementIcon = qtawesome.icon(managementSet, color="#404258")
+        app.setWindowIcon(managementIcon)
+
         ############################################################################################################
         # ICON SETUP
         # Setting up icons for each button (couldn't find another way to show icons but with buttons)
-        self.sign_off_button.setIcon(qta.icon('fa5s.sign-out-alt', color='orange'))
-        self.left_menu_button.setIcon(qta.icon('fa5s.sign-in-alt', color='orange', hflip=True))
-        self.pushButton_7.setIcon(qta.icon('ri.pie-chart-line', color='orange'))
+        self.sign_off_button.setIcon(qtawesome.icon('fa5s.sign-out-alt', color='orange'))
+        self.left_menu_button.setIcon(qtawesome.icon('fa5s.sign-in-alt', color='orange', hflip=True))
+        self.pushButton_7.setIcon(qtawesome.icon(managementSet, color='orange'))
         self.pushButton_7.setIconSize(QtCore.QSize(32, 32))  # Rezise the icon to 32x32
 
-        self.dashboard_pushButton.setIcon(qta.icon('mdi.monitor-dashboard', color='orange'))
-        self.cost_pushButton.setIcon(qta.icon('fa5s.money-bill', color='orange'))
-        self.work_orders_pushButton.setIcon(qta.icon('ri.list-unordered', color='orange'))
-        self.inventory_pushButton.setIcon(qta.icon('mdi.warehouse', color='orange'))
-        self.work_orders_pushButton.setIcon(qta.icon('fa.bar-chart-o', color='orange'))
-        self.charts_pushButton.setIcon(qta.icon('mdi6.chart-areaspline', color='orange'))
+        self.dashboard_pushButton.setIcon(qtawesome.icon('mdi.monitor-dashboard', color='orange'))
+        self.cost_pushButton.setIcon(qtawesome.icon('fa5s.money-bill', color='orange'))
+        self.work_orders_pushButton.setIcon(qtawesome.icon('ri.list-unordered', color='orange'))
+        self.inventory_pushButton.setIcon(qtawesome.icon('mdi.warehouse', color='orange'))
+        self.work_orders_pushButton.setIcon(qtawesome.icon('fa.bar-chart-o', color='orange'))
+        self.charts_pushButton.setIcon(qtawesome.icon('mdi6.chart-areaspline', color='orange'))
 
         # set right_menu_widget as hidden when starting the application
         self.right_menu_widget.setHidden(True)
@@ -402,10 +406,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-
-    # Create an icon
-    icon = qtawesome.icon("fa.server", color="#404258")
-    app.setWindowIcon(icon)
     
     window = MainWindow()
     window.show()
