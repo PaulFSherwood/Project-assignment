@@ -2,7 +2,7 @@ import json
 import getpass
 from cryptography.fernet import Fernet
 
-# get Host, User, Password, Database from user input protect password from view
+# Get user input for Database stuff
 host = input("Enter the host: ")
 user = input("Enter the user: ")
 password = getpass.getpass("Enter the password: ")

@@ -531,9 +531,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if not subs_id:
             print("The query is empty.")
 
-        print(f"jcn: {jcn} reportedBy: {reportedBy} disposition: {disposition} creation_reason: {creation_reason} \
-                creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \
-                simulator: {simulator} subsystem: {subsystem}")
+        # print(f"jcn: {jcn} reportedBy: {reportedBy} disposition: {disposition} creation_reason: {creation_reason} \
+        #         creation_date: {creation_date} priority: {priority} correction_note: {correction_note} \
+        #         simulator: {simulator} subsystem: {subsystem}")
         # Insert new JCN
         insert_query = "INSERT INTO workorders (jcn, \
                                                 reported_by_name, \

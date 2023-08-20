@@ -318,10 +318,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.topChartview.resize(self.chart_top.size())
         self.topChartview.show()
 
-
-
-
-
         # ## Bottom chart
         getInventoryData = "CALL GetInventoryData()"
 
@@ -363,8 +359,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.bottomChartview.setParent(self.chart_bottom)
         self.bottomChartview.resize(self.chart_bottom.size())
         self.bottomChartview.show()
-
-
 
     ############################################################################################################
     ## NEW JCN's SECTION

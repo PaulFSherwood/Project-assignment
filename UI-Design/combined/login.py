@@ -8,11 +8,13 @@ from utilities import decrypt_config, Validator
 from database_utilites import execute_query, execute_insert_query
 from login_utilities import authenticate, get_user_role, get_user_id
 
-
+# Python bindings for Qt
 from PyQt6 import QtWidgets
 from PyQt6.QtWidgets import QDialog, QApplication, QMainWindow
 from PyQt6.QtGui import QIcon
 from PyQt6.uic import loadUi
+
+# Icon library
 import qtawesome  #load last to avoid using PyQt5 and breaking icons
 
 # Decrypt and save the config
@@ -92,6 +94,8 @@ class CreateAcc(QDialog):
         super(CreateAcc, self).__init__()
         loadUi("createaccount.ui",self)
         self.CreateAccountPushButton.clicked.connect(self.create_account)
+        self.ReturnLoginButton.clicked.connect(self.returntologin)
+
         self.PasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
         self.ConfirmPasswordLineEdit.setEchoMode(QtWidgets.QLineEdit.EchoMode.Password)
 
@@ -99,6 +103,11 @@ class CreateAcc(QDialog):
         self.RoleComboBox.addItem("MAINTENANCE")
         self.RoleComboBox.addItem("LOGISTICS")
 
+    # Switches from Create Account screen to Login screen
+    def returntologin(self):
+        login = Login()
+        widget.addWidget(login)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
     def encrypt_password(self, password):
         # Generate a salt and hash the password

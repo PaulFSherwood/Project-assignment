@@ -2,13 +2,16 @@ import os
 import sys
 import argparse
 import mysql.connector
+from datetime import datetime
 
+# Python bindings for Qt
 from PyQt6 import QtWidgets, uic, QtCore, QtGui
 from PyQt6.QtCharts import QChart, QChartView, QLineSeries, QPieSeries, QBarSet, QBarSeries
 from PyQt6.QtCore import Qt, QPointF, QTimer
 from PyQt6.QtGui import QPainter
 
-import qtawesome
+# Icon library
+import qtawesome  #load last to avoid using PyQt5 and breaking icons
 
 from database_utilites import execute_query, execute_insert_query
 
@@ -100,7 +103,8 @@ class MainWindow(QtWidgets.QMainWindow):
             sign_off_id = args.user_id
             
             def execute_and_hide():
-                query = f"UPDATE workorders SET signed_off_id = {sign_off_id} WHERE creation_reason = '{label.text()}' AND jcn = '{jcn_num.text()}' AND {sign_off_id} IN (SELECT user_id FROM users)"
+                current_date = datetime.now().date().strftime('%Y-%m-%d')
+                query = f"UPDATE workorders SET signed_off_id = {sign_off_id}, sign_off_date = '{current_date}' WHERE creation_reason = '{label.text()}' AND jcn = '{jcn_num.text()}' AND {sign_off_id} IN (SELECT user_id FROM users)"
                 execute_insert_query(query)
 
                 # update the set count table
