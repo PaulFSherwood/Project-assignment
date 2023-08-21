@@ -1,5 +1,8 @@
 # Project-assignment
 SDEV-Project
+
+This project is used to create, edit and manage work orders for flight simulators.  It can also track inventory and uses MySQL backend database.
+
 # Project Assignment - Management UI
 
 This project contains a management user interface (UI) for an application. The main program, `login.py`, is located in the following folder:
