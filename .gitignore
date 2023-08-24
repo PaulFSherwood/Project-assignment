@@ -257,6 +257,11 @@ QT/*Release/
 QT/build-*/
 build*/
 
+# Video files
+*.avi
+*.mp4
+*.mpg
+
 # .log files (usually created by QtTest - thanks to VestniK)
 *.log
 
