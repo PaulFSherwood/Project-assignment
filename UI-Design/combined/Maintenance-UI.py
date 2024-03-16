@@ -23,6 +23,15 @@ class MainWindow(QtWidgets.QMainWindow):
         super(MainWindow, self).__init__(parent)
         uic.loadUi('Maintenance-UI.ui', self)
 
+        # Data Store
+        self.all_debrief_data = None
+
+        # Update Data Store
+        self.mission_profile_group = self.run_stored_procedure("CALL GetAllMissionProfiles()")
+        self.devices_group = self.run_stored_procedure("CALL GetAllDevices()")
+        self.instructors_group = self.run_stored_procedure("CALL GetInstructorUsers()")
+        self.maintenance_group = self.run_stored_procedure("CALL GetMaintenanceUsers()")
+        
         # Set window icon
         icon = qtawesome.icon("mdi6.account-wrench-outline", color="#404258")
         app.setWindowIcon(icon)
@@ -40,6 +49,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_orders_pushButton.setIcon(qtawesome.icon('fa.bar-chart-o', color='orange'))
         self.charts_pushButton.setIcon(qtawesome.icon('mdi6.chart-areaspline', color='orange'))
         self.CreateJCN_pushButton.setIcon(qtawesome.icon('mdi6.file-document-edit-outline', color='orange'))
+        self.debrief_pushButton.setIcon(qtawesome.icon('mdi.briefcase-download-outline', color='orange'))
 
         ############################################################################################################
         # BUTTON CONNECTIONS (signals and slots)
@@ -52,12 +62,14 @@ class MainWindow(QtWidgets.QMainWindow):
         # self.CreateJCN_pushButton.clicked.connect(lambda: self.switch_page(self.newJCN_view, "NEW JCN"))
         self.CreateJCN_pushButton.clicked.connect(self.update_new_jcn_fields)
         self.disposition_comboBox.currentIndexChanged.connect(self.on_disposition_changed)
+        self.debrief_pushButton.clicked.connect(lambda: self.switch_page(self.debrief_view, "DEBRIEF"))
 
         ############################################################################################################
         # USER ACTION UPDATES
         self.work_order_table.cellClicked.connect(self.update_line_edits)  
         self.addJCN_pushButton.clicked.connect(self.add_new_jcn)     
-        self.update_pushButton.clicked.connect(self.update_jcn_database) 
+        self.update_pushButton.clicked.connect(self.update_jcn_database)
+        self.debrief_table.cellClicked.connect(self.update_debrief_input_widget) 
 
         ############################################################################################################
         # TABLE SETUP / TAB SETUP
@@ -68,12 +80,34 @@ class MainWindow(QtWidgets.QMainWindow):
         self.load_charts_data()
 
         self.set_priority_counts()
+        self.load_debrief_data()
     
     ############################################################################################################
     # Helper Function
     def switch_page(self, widget, title):
         self.stackedWidget.setCurrentWidget(widget)
         self.title_label.setText(title)
+
+    def run_stored_procedure(self, query):
+        try:
+            result = execute_query(query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not result:
+            print("The query is empty.")
+        return result
+    
+    # Get the debrief data 
+    def getDebriefData(self):
+        debrief_query = "SELECT * FROM flight_simulator_db.debrief"
+        try:
+            self.all_debrief_data = execute_query(debrief_query)
+        except Exception as e:
+            print("Error with query: ", e)
+            return
+        if not self.all_debrief_data:
+            print("The query is empty.")
 
     def resizeEvent(self, event):
         if event:
@@ -200,11 +234,11 @@ class MainWindow(QtWidgets.QMainWindow):
         self.work_order_table.verticalHeader().setVisible(False)
         # set column widths
         self.work_order_table.setColumnWidth(0, 100) # JCN
-        self.work_order_table.setColumnWidth(1, 80) # Simulator
-        self.work_order_table.setColumnWidth(2, 80) # Disposition
+        self.work_order_table.setColumnWidth(1, 80)  # Simulator
+        self.work_order_table.setColumnWidth(2, 80)  # Disposition
         self.work_order_table.setColumnWidth(3, 200) # Reason
-        self.work_order_table.setColumnWidth(4, 90) # Date
-        self.work_order_table.setColumnWidth(5, 50) # Priority
+        self.work_order_table.setColumnWidth(4, 90)  # Date
+        self.work_order_table.setColumnWidth(5, 50)  # Priority
         self.work_order_table.setColumnWidth(6, 100) # Notes
 
         # resize "Notes" column to fill remaining space
@@ -334,6 +368,139 @@ class MainWindow(QtWidgets.QMainWindow):
         self.disposition_comboBox.clear()
         # update jcn number
         self.load_work_order_data()
+
+    ############################################################################################################
+    # DEBRIEF SECTION
+    def load_debrief_data(self):
+        # Update the data
+        self.getDebriefData()
+        
+        # print(self.all_debrief_data[0][11])
+
+        # set the number of rows
+        self.debrief_table.setRowCount(len(self.all_debrief_data))
+        # hide row numbers
+        self.debrief_table.verticalHeader().setVisible(False)
+        # set column widths
+        # Debrief ID | Date | Instructor | Device | Mission Profile | Start Time | Stop Time
+        self.debrief_table.setColumnWidth(0, 120) # Debrief ID
+        self.debrief_table.setColumnWidth(1, 100) # Date
+        self.debrief_table.setColumnWidth(2, 100) # Instructor
+        self.debrief_table.setColumnWidth(3, 100) # Device
+        self.debrief_table.setColumnWidth(4, 100) # Mission Profile
+        self.debrief_table.setColumnWidth(5, 100) # Start Time
+        self.debrief_table.setColumnWidth(6, 100) # Stop Time
+
+        # push data into the table
+        row_index = 0  # Initialize the row index
+        # push data into the table
+        for debrief in self.all_debrief_data:                       ## debrief[#] is the index of the debrief data
+            self.debrief_table.setItem(row_index, 0, QtWidgets.QTableWidgetItem(str(debrief[0])))
+            self.debrief_table.setItem(row_index, 1, QtWidgets.QTableWidgetItem(str(debrief[13])))
+            self.debrief_table.setItem(row_index, 2, QtWidgets.QTableWidgetItem(str(debrief[11])))
+            self.debrief_table.setItem(row_index, 3, QtWidgets.QTableWidgetItem(str(debrief[12])))
+            self.debrief_table.setItem(row_index, 4, QtWidgets.QTableWidgetItem(str(debrief[15])))
+            self.debrief_table.setItem(row_index, 5, QtWidgets.QTableWidgetItem(str(debrief[7])))
+            self.debrief_table.setItem(row_index, 6, QtWidgets.QTableWidgetItem(str(debrief[8])))
+
+            row_index += 1                                                                                  # Increment the row index
+
+        # If the Stop time is past the current time set the background color of that cell to light red
+        for row in range(self.debrief_table.rowCount()):
+            stop_time_item = self.debrief_table.item(row, 6)
+            stop_time = stop_time_item.text()
+            if stop_time > QDateTime.currentDateTime().toString("yyyy-MM-ddThh:mm:ss"):
+                stop_time_item.setBackground(QtGui.QColor(255, 0, 0))                                        # Red background
+                stop_time_item.setForeground(QtGui.QBrush(QtGui.QColor(255, 255, 255)))                      # White text color
+
+    def update_debrief_input_widget(self, row):
+        # Actual Start  : start_lineEdit            : time
+        # Actual Stop   : stop_lineEdit             : time
+        # hours (THE)   : actual_hours_lineEdit     : time
+        # MDT           : mdt_lineEdit              : integer
+        # Mission Status: mission_status_comboBox   : string (ENUM from database.MissionStatus)
+        # MIRT          : mirt_lineEdit             : integer
+        # Sched. Start  : sched_start_lineEdit      : time
+        # Sched. Stop   : sched_stop_lineEdit       : time
+        # Sched. Hours  : sched_hours_lineEdit      : time
+        # Debriefer     : debriefer_comboBox        : string (ENUM from database.users) (default is in debrief table but should show other maintenance in users)
+        # Instructor    : instructor_comboBox       : string (ENUM from database.users) (default is in debrief table but should show other instructos in users)
+        # Device        : device_comboBox           : string (ENUM from database.devices)
+        ## need to update database so it has a table for devices, and mission
+        # Debrief ID    : debrief_ID_lineEdit       : bigint (example: 202403090732 | year month day hour minute second)
+        # JCN           : debrief_jcn_lineEdit      : varchar(255) (will check if the JCN exists when submit is hit [submit_debrief_pushButton])
+        # date          : debrief_date_lineEdit     : date (will be the current date)
+        # mission profil: mission_profile_comboBox  : string (ENUM from database.MissionProfile)
+        # Submit Button : submit_debrief_pushButton : button (will submit the debrief to the database)
+
+        # update the debrief data
+        # self.getDebriefData()
+        self.all_debrief_data
+        # Pull out the data we need
+        debrief_id_item = str(self.all_debrief_data[row][0])
+        actual_start_time = str(self.all_debrief_data[row][1])
+        actual_stop_time = str(self.all_debrief_data[row][2])
+        hours = str(self.all_debrief_data[row][3])
+        mission_status = str(self.all_debrief_data[row][4])
+        mdt = str(self.all_debrief_data[row][5])
+        mirt = str(self.all_debrief_data[row][6])
+        sched_start_time = str(self.all_debrief_data[row][7])
+        sched_stop_time = str(self.all_debrief_data[row][8])
+        sched_hours = str(self.all_debrief_data[row][9])
+        debriefer = str(self.all_debrief_data[row][10])
+        instructor_name = str(self.all_debrief_data[row][11])
+        device_name = str(self.all_debrief_data[row][12])
+        debrief_date = str(self.all_debrief_data[row][13])
+        debrief_jcn = str(self.all_debrief_data[row][14])
+        mission_profile = str(self.all_debrief_data[row][15])
+
+        # Now update your line edits and text edits with the content from the clicked row
+        self.debrief_ID_lineEdit.setText(debrief_id_item)
+        self.start_lineEdit.setText(actual_start_time)
+        self.stop_lineEdit.setText(actual_stop_time)
+        self.actual_hours_lineEdit.setText(hours)
+        self.mdt_lineEdit.setText(mdt)
+        self.mirt_lineEdit.setText(mirt)
+        self.sched_start_lineEdit.setText(sched_start_time)
+        self.sched_stop_lineEdit.setText(sched_stop_time)
+        self.sched_hours_lineEdit.setText(sched_hours)
+        self.debrief_date_lineEdit.setText(debrief_date)
+        self.debrief_jcn_lineEdit.setText(debrief_jcn)
+
+        # Generate mission_status options msOptions
+        self.mission_status_comboBox.addItem("Incomplete")
+        self.mission_status_comboBox.addItem("Complete")
+        self.mission_status_comboBox.setCurrentText(mission_status)
+
+        # print(self.maintenance_group)
+        # Add all users to the debriefer_comboBox
+        for user in self.maintenance_group:
+            self.debriefer_comboBox.addItem(user[0])
+        self.debriefer_comboBox.setCurrentText(debriefer)
+        
+        # Add all users to the instructor_comboBox
+        for user in self.instructors_group:
+            self.instructor_comboBox.addItem(user[0])
+        self.instructor_comboBox.setCurrentText(instructor_name)
+        print("Instructor: " + instructor_name)
+
+        # Add all devices to the device_comboBox
+        for device in self.devices_group:
+            self.device_comboBox.addItem(device[0])
+        self.device_comboBox.setCurrentText(device_name)
+        # Add all mission profiles to the mission_profile_comboBox
+        self.mission_profile_comboBox.clear()
+        for profile in self.mission_profile_group:
+            self.mission_profile_comboBox.addItem(profile[0])
+        self.mission_profile_comboBox.setCurrentText(mission_profile)
+
+        # allow edits
+        self.mission_status_comboBox.setEnabled(True)
+        # self.mission_status_comboBox.lineEdit().setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+
+
+
 
     ##############################################################################################################
     # INVENTORY SECTION

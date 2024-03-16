@@ -31,7 +31,7 @@
 }
 
 #left_menu_widget, #stackedWidget,#right_menu_widget,#dashboard_view,
-#cost_view, #work_orders_view, #inventory_view, #charts_view, #newJCN_view {
+#cost_view, #work_orders_view, #inventory_view, #charts_view, #newJCN_view, #debrief_view {
     background-color: rgba(61, 80, 95, 100);
 }
 
@@ -342,25 +342,40 @@ QTableView::item:hover {
             </property>
            </widget>
           </item>
+          <item>
+           <widget class="QPushButton" name="debrief_pushButton">
+            <property name="minimumSize">
+             <size>
+              <width>120</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>120</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Debrief</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </widget>
        </item>
-       <item alignment="Qt::AlignLeft">
-        <widget class="QFrame" name="buffer_frame">
-         <property name="minimumSize">
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
           <size>
-           <width>100</width>
-           <height>0</height>
+           <width>20</width>
+           <height>20</height>
           </size>
          </property>
-         <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
-         </property>
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_6"/>
-        </widget>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -509,7 +524,7 @@ QTableView::item:hover {
              <string notr="true"/>
             </property>
             <property name="currentIndex">
-             <number>0</number>
+             <number>5</number>
             </property>
             <widget class="QWidget" name="dashboard_view">
              <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -1547,6 +1562,664 @@ QPushButton:hover {
                </widget>
               </item>
              </layout>
+            </widget>
+            <widget class="QWidget" name="debrief_view">
+             <widget class="QTableWidget" name="debrief_table">
+              <property name="geometry">
+               <rect>
+                <x>9</x>
+                <y>9</y>
+                <width>753</width>
+                <height>245</height>
+               </rect>
+              </property>
+              <property name="font">
+               <font>
+                <family>Verdana</family>
+                <pointsize>-1</pointsize>
+               </font>
+              </property>
+              <column>
+               <property name="text">
+                <string>Debrief ID</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Date</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Instructor</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Device</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Mission Profile</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Start Time</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Stop Time</string>
+               </property>
+              </column>
+             </widget>
+             <widget class="QTabWidget" name="debrief_input_tabWidget">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>260</y>
+                <width>753</width>
+                <height>244</height>
+               </rect>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">
+    background-color: rgb(61, 80, 95);
+</string>
+              </property>
+              <property name="currentIndex">
+               <number>0</number>
+              </property>
+              <widget class="QWidget" name="main_3">
+               <attribute name="title">
+                <string>User Input</string>
+               </attribute>
+               <layout class="QHBoxLayout" name="horizontalLayout_19">
+                <item>
+                 <widget class="QFrame" name="frame_26">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <widget class="QLineEdit" name="actual_hours_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="mission_status_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>5</x>
+                     <y>120</y>
+                     <width>101</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Mission Status</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="start_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Actual Start</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="actual_hours_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>60</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Hours (THE)</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="start_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="mirt_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>120</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>MIRT</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="mirt_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>140</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="mission_status_comboBox">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>140</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="stop_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Actual Stop</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="stop_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="mdt_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>60</y>
+                     <width>71</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>MDT</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="mdt_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_27">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <widget class="QLabel" name="sched_start_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Sched. Start</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="sched_start_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="sched_stop_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Sched. Stop</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="sched_stop_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="debriefer_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>60</y>
+                     <width>101</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Debriefer</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="debriefer_comboBox">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="sched_hours_lable">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>60</y>
+                     <width>91</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Sched. Hours</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="sched_hours_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="instructor_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>15</x>
+                     <y>120</y>
+                     <width>91</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Instructor</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="device_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>120</y>
+                     <width>101</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Device</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="instructor_comboBox">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>140</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="device_comboBox">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>140</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QFrame" name="frame_28">
+                  <property name="frameShape">
+                   <enum>QFrame::StyledPanel</enum>
+                  </property>
+                  <property name="frameShadow">
+                   <enum>QFrame::Raised</enum>
+                  </property>
+                  <widget class="QLabel" name="debrief_ID_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Debrief ID</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="debrief_jcn_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>0</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>JCN</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="debrief_ID_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="debrief_jcn_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>20</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="debrief_date_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>60</y>
+                     <width>81</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="text">
+                    <string>Date</string>
+                   </property>
+                  </widget>
+                  <widget class="QLineEdit" name="debrief_date_lineEdit">
+                   <property name="geometry">
+                    <rect>
+                     <x>0</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QComboBox" name="mission_profile_comboBox">
+                   <property name="geometry">
+                    <rect>
+                     <x>130</x>
+                     <y>80</y>
+                     <width>101</width>
+                     <height>31</height>
+                    </rect>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">background-color: rgb(148, 177, 255);
+border: 1px solid #000000;
+border-radius: 10px;
+font: 12pt &quot;Verdana&quot;;
+color: rgb(66, 8, 36);</string>
+                   </property>
+                  </widget>
+                  <widget class="QLabel" name="mission_profile_label">
+                   <property name="geometry">
+                    <rect>
+                     <x>140</x>
+                     <y>60</y>
+                     <width>101</width>
+                     <height>20</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Mission Profile</string>
+                   </property>
+                  </widget>
+                  <widget class="QPushButton" name="submit_debrief_pushButton">
+                   <property name="geometry">
+                    <rect>
+                     <x>10</x>
+                     <y>140</y>
+                     <width>71</width>
+                     <height>34</height>
+                    </rect>
+                   </property>
+                   <property name="font">
+                    <font>
+                     <family>Verdana</family>
+                     <pointsize>-1</pointsize>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="styleSheet">
+                    <string notr="true">QPushButton {
+    background-color: rgb(71, 80, 65);
+    border-radius: 15px;
+    border: 3px solid rgb(120, 157, 186);
+    text-align: left;
+    padding-left: 8px;
+}
+
+QPushButton:hover {
+    background-color: rgb(95, 80, 61);
+    border-radius: 16px;
+    border: 3px solid rgb(186, 157, 120);
+}</string>
+                   </property>
+                   <property name="text">
+                    <string>Submit</string>
+                   </property>
+                  </widget>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </widget>
             </widget>
             <widget class="QWidget" name="newJCN_view">
              <layout class="QVBoxLayout" name="verticalLayout_3">

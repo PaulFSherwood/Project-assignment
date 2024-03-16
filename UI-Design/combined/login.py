@@ -102,6 +102,7 @@ class CreateAcc(QDialog):
         self.RoleComboBox.addItem("MANAGER")
         self.RoleComboBox.addItem("MAINTENANCE")
         self.RoleComboBox.addItem("LOGISTICS")
+        self.RoleComboBox.addItem("INSTRUCTOR")
 
     # Switches from Create Account screen to Login screen
     def returntologin(self):
