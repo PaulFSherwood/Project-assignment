@@ -40,7 +40,7 @@ CREATE TABLE `debrief` (
   `Device` enum('hh-60','767','c172') DEFAULT NULL,
   `Date` date DEFAULT NULL,
   `JCN` varchar(255) DEFAULT NULL,
-  `MissionProfile` enum('Gov''t Led Tng - Currency','61/CMT-1/F','111/CPT-15/A','61/CMT-2/F') DEFAULT NULL,
+  `MissionProfile` enum('Gov','61','111','61/A') DEFAULT NULL,
   PRIMARY KEY (`DebriefID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -51,7 +51,7 @@ CREATE TABLE `debrief` (
 
 LOCK TABLES `debrief` WRITE;
 /*!40000 ALTER TABLE `debrief` DISABLE KEYS */;
-INSERT INTO `debrief` (`DebriefID`, `ActualStartTime`, `ActualStopTime`, `Hours`, `MissionStatus`, `MDT`, `MIRT`, `ScheduledStartTime`, `ScheduledStopTime`, `Debriefer`, `Instructor`, `Device`, `Date`, `JCN`, `MissionProfile`) VALUES (202403090732,'12:00:00','16:00:00','04:00:00','incomplete',-4,'0','12:00:00','16:00:00','Anderson','SmithP','hh-60','2024-03-09','JCN12345','Gov\'t Led Tng - Currency'),(202403090733,'16:00:00','20:00:00','04:00:00','complete',0,'0','16:00:00','20:00:00','Bailey','KingP','767','2024-03-09','','61/CMT-1/F'),(202403100733,'06:00:00','10:00:00','04:00:00','complete',0,'0','06:00:00','10:00:00','Paul','EdwardsP','c172','2024-03-09','','111/CPT-15/A'),(202403100734,'10:00:00','14:00:00','04:00:00','complete',0,'0','10:00:00','14:00:00','Foster','DavisP','767','2024-03-09','','61/CMT-1/F'),(202403100735,'14:00:00','18:00:00','04:00:00','complete',0,'0','14:00:00','18:00:00','Anderson','DavisP','hh-60','2024-03-09','','61/CMT-1/F'),(202403100736,'18:00:00','22:00:00','04:00:00','complete',0,'0','18:00:00','22:00:00','Bailey','GrayP','c172','2024-03-09','','111/CPT-15/A');
+INSERT INTO `debrief` (`DebriefID`, `ActualStartTime`, `ActualStopTime`, `Hours`, `MissionStatus`, `MDT`, `MIRT`, `ScheduledStartTime`, `ScheduledStopTime`, `Debriefer`, `Instructor`, `Device`, `Date`, `JCN`, `MissionProfile`) VALUES (202403090732,'12:00:00','16:00:00','04:00:00','incomplete',-4,'0','12:00:00','16:00:00','Anderson','SmithP','hh-60','2024-03-09','JCN12345','Gov'),(202403090733,'16:00:00','20:00:00','04:00:00','complete',0,'0','16:00:00','20:00:00','Bailey','KingP','767','2024-03-09','','61'),(202403100733,'06:00:00','10:00:00','04:00:00','complete',0,'0','06:00:00','10:00:00','Paul','EdwardsP','c172','2024-03-09','','111'),(202403100734,'10:00:00','14:00:00','04:00:00','complete',0,'0','10:00:00','14:00:00','Foster','DavisP','767','2024-03-09','','61/A'),(202403100735,'14:00:00','18:00:00','04:00:00','complete',0,'0','14:00:00','18:00:00','Anderson','DavisP','hh-60','2024-03-09','','61'),(202403100736,'18:00:00','22:00:00','04:00:00','complete',0,'0','18:00:00','22:00:00','Bailey','GrayP','c172','2024-03-09','','111');
 /*!40000 ALTER TABLE `debrief` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -195,7 +195,7 @@ CREATE TABLE `mission_profiles` (
 
 LOCK TABLES `mission_profiles` WRITE;
 /*!40000 ALTER TABLE `mission_profiles` DISABLE KEYS */;
-INSERT INTO `mission_profiles` VALUES (1,'Gov\'t Led Tng - Currency'),(2,'61/CMT-1/F'),(3,'111/CPT-15/A'),(4,'61/CMT-2/F');
+INSERT INTO `mission_profiles` VALUES (1,'Gov'),(2,'61'),(3,'111'),(4,'61/A');
 /*!40000 ALTER TABLE `mission_profiles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -549,4 +549,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-03-16  8:52:56
+-- Dump completed on 2024-03-20 10:01:38
